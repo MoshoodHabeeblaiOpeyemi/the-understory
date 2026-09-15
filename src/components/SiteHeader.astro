@@ -7,7 +7,7 @@
     <img src="/images/logo.svg" alt="The Understory" class="logo" />
   </a>
 
-  <nav class="site-nav">
+  <nav id="site-nav" class="site-nav">
     <a href="/">Home</a>
     <a href="/modules">Modules</a>
     <a href="/glossary">Glossary</a>
@@ -16,6 +16,12 @@
   </nav>
 
   <button id="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+
+  <button class="nav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="site-nav">
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+  </button>
 </header>
 
 <script>
@@ -35,6 +41,17 @@
 
         htmlElement.setAttribute("data-theme", newTheme);
         localStorage.setItem("theme", newTheme);
+      });
+    }
+
+    // Hamburger menu: find the button and the nav it controls
+    const navToggle = document.querySelector(".nav-toggle");
+    const siteNav = document.getElementById("site-nav");
+
+    if (navToggle && siteNav) {
+      navToggle.addEventListener("click", () => {
+        const isOpen = siteNav.classList.toggle("is-open");
+        navToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
       });
     }
   });
@@ -86,6 +103,43 @@
     .site-nav {
       width: auto;
       order: 0;
+    }
+  }
+
+  /* Hamburger button — hidden on desktop, shown on mobile */
+  .nav-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    background: none;
+    border: 1px solid var(--text-color);
+    border-radius: 6px;
+    padding: 10px 8px;
+    cursor: pointer;
+  }
+
+  .nav-toggle .bar {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background-color: var(--text-color);
+  }
+
+  /* Mobile: hide the nav until the hamburger opens it */
+  @media (max-width: 767.98px) {
+    .nav-toggle {
+      display: flex;
+    }
+
+    .site-nav {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .site-nav.is-open {
+      display: flex;
     }
   }
 </style>
