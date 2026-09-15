@@ -1,0 +1,91 @@
+---
+// This is the component script. It runs at build time.
+---
+
+<header class="site-header">
+  <a href="/" class="logo-link">
+    <img src="/images/logo.svg" alt="The Understory" class="logo" />
+  </a>
+
+  <nav class="site-nav">
+    <a href="/">Home</a>
+    <a href="/modules">Modules</a>
+    <a href="/glossary">Glossary</a>
+    <a href="/field-notes">Field Notes</a>
+    <a href="/about">About</a>
+  </nav>
+
+  <button id="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+</header>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme) {
+      document.documentElement.setAttribute("data-theme", savedTheme);
+    }
+
+    const toggleButton = document.getElementById("theme-toggle");
+    const htmlElement = document.documentElement;
+
+    if (toggleButton) {
+      toggleButton.addEventListener("click", () => {
+        const currentTheme = htmlElement.getAttribute("data-theme");
+        const newTheme = currentTheme === "dark" ? "light" : "dark";
+
+        htmlElement.setAttribute("data-theme", newTheme);
+        localStorage.setItem("theme", newTheme);
+      });
+    }
+  });
+</script>
+
+<style>
+  .site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    padding: var(--space-sm);
+    border-bottom: 1px solid #e5e5e5;
+  }
+
+  .logo {
+    height: 40px;
+    width: auto;
+    display: block;
+  }
+
+  .site-nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-sm);
+    width: 100%;
+    order: 3;
+  }
+
+  .site-nav a {
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: 500;
+  }
+
+  #theme-toggle {
+    background: none;
+    border: 1px solid var(--text-color);
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+    cursor: pointer;
+    font-size: 1.25rem;
+    color: var(--text-color);
+  }
+
+  @media (min-width: 768px) {
+    .site-nav {
+      width: auto;
+      order: 0;
+    }
+  }
+</style>

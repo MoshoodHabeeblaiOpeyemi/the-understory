@@ -1,0 +1,30 @@
+---
+// SiteFooter.astro
+// The footer every page shares, imported by BaseLayout.
+// Small for now — this is where copyright, credit, and (soon)
+// quick links will live.
+---
+
+<footer class="site-footer">
+  <p class="site-footer-copy">© 2026 The Understory.</p>
+  <p class="site-footer-tagline">The layer beneath the code.</p>
+</footer>
+
+<style>
+  .site-footer {
+    padding: var(--space-sm) var(--space-sm);
+    border-top: 1px solid #e5e5e5;
+    text-align: center;
+  }
+
+  .site-footer-copy {
+    margin: 0;
+    font-size: 0.9rem;
+  }
+
+  .site-footer-tagline {
+    margin: var(--space-sm) 0 0;
+    font-size: 0.8rem;
+    opacity: 0.7;
+  }
+</style>
