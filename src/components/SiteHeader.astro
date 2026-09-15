@@ -17,7 +17,12 @@
 
   <button id="theme-toggle" aria-label="Toggle dark mode">🌙</button>
 
-  <button class="nav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="site-nav">
+  <button
+    class="nav-toggle"
+    aria-label="Menu"
+    aria-expanded="false"
+    aria-controls="site-nav"
+  >
     <span class="bar"></span>
     <span class="bar"></span>
     <span class="bar"></span>
@@ -140,6 +145,19 @@
 
     .site-nav.is-open {
       display: flex;
+    }
+    .site-nav.is-open a {
+      animation: slide-in 0.4s ease-in-out both;
+    }
+    @keyframes slide-in {
+      from {
+        opacity: 0;
+        transform: translateY(-15px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
   }
 </style>
