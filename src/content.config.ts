@@ -9,8 +9,8 @@ const lessons = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/lessons" }),
   schema: z.object({
     title: z.string(), // lesson name, e.g. "What Happens When You Press Enter"
-    module: z.number(), // which of the 17 modules (1-17)
-    day: z.number(), // day number in the 167-day journey
+    module: z.number(), // which of the 18 modules (1-18)
+    day: z.number(), // day number in the 193-day journey
   }),
 });
 

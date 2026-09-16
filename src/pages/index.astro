@@ -1,8 +1,83 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+import modules from "../data/modules.json";
+
+// The vault hands over every lesson it holds.
+const lessons = await getCollection("lessons");
+
+// How many vault lessons belong to a given module?
+const written = (moduleId) =>
+  lessons.filter((lesson) => lesson.data.module === moduleId).length;
+
+// Total days = sum of every module's range size.
+const totalDays = modules.reduce(
+  (sum, m) => sum + (m.dayEnd - m.dayStart + 1),
+  0
+);
 ---
 
 <BaseLayout>
-  <h1>The Understory</h1>
-  <p>The layer beneath the code.</p>
+  <section class="hero">
+    <h1>The Understory</h1>
+    <p class="tagline">The layer beneath the code.</p>
+    <p class="stats">
+      {modules.length} modules · {totalDays} days · {lessons.length} lessons written
+    </p>
+  </section>
+
+  <div class="module-grid">
+    {modules.map((m) => (
+      <div class="module-card">
+        <span class="module-emoji">{m.emoji}</span>
+        <h2>{m.title}</h2>
+        <p class="module-tagline">{m.tagline}</p>
+        <p class="module-meta">
+          Days {m.dayStart}–{m.dayEnd} · {written(m.id)}/{m.dayEnd - m.dayStart + 1} written
+        </p>
+      </div>
+    ))}
+  </div>
 </BaseLayout>
+
+<style>
+  .hero {
+    text-align: center;
+    padding: var(--space-lg) var(--space-md);
+  }
+  .tagline {
+    font-size: 1.2rem;
+    opacity: 0.8;
+  }
+  .stats {
+    color: var(--accent-color);
+    font-weight: 600;
+  }
+
+  .module-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: var(--space-md);
+    padding: 0 var(--space-md) var(--space-lg);
+  }
+
+  .module-card {
+    border: 1px solid color-mix(in srgb, var(--text-color) 15%, transparent);
+    border-radius: 12px;
+    padding: var(--space-md);
+  }
+  .module-emoji {
+    font-size: 1.8rem;
+  }
+  .module-card h2 {
+    margin: 0.5rem 0 0.25rem;
+  }
+  .module-tagline {
+    opacity: 0.75;
+  }
+  .module-meta {
+    color: var(--accent-color);
+    font-weight: 600;
+  }
+</style>
+
