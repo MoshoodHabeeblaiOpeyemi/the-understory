@@ -1,0 +1,146 @@
+[
+  {
+    "id": 1,
+    "emoji": "🧱",
+    "title": "The Web Platform",
+    "tagline": "The foundation. How the internet actually works before we write a single line of code.",
+    "dayStart": 1,
+    "dayEnd": 12
+  },
+  {
+    "id": 2,
+    "emoji": "🌐",
+    "title": "The Browser",
+    "tagline": "The environment code lives in. Know its anatomy.",
+    "dayStart": 13,
+    "dayEnd": 18
+  },
+  {
+    "id": 3,
+    "emoji": "🎨",
+    "title": "HTML & CSS Theory",
+    "tagline": "The language of structure and style. Learn why it works, not just how to write it.",
+    "dayStart": 19,
+    "dayEnd": 32
+  },
+  {
+    "id": 4,
+    "emoji": "⚙️",
+    "title": "JavaScript Theory",
+    "tagline": "The language itself. Deep, not wide. The biggest module for a reason.",
+    "dayStart": 33,
+    "dayEnd": 50
+  },
+  {
+    "id": 5,
+    "emoji": "🏗️",
+    "title": "Architecture & Rendering",
+    "tagline": "How applications are structured and how they get to the user.",
+    "dayStart": 51,
+    "dayEnd": 60
+  },
+  {
+    "id": 6,
+    "emoji": "🔌",
+    "title": "APIs & Data",
+    "tagline": "How applications talk to each other. The module most juniors are weakest on.",
+    "dayStart": 61,
+    "dayEnd": 72
+  },
+  {
+    "id": 7,
+    "emoji": "🧩",
+    "title": "Frameworks & Libraries",
+    "tagline": "The tools everyone uses. Know them by name, purpose, and origin.",
+    "dayStart": 73,
+    "dayEnd": 85
+  },
+  {
+    "id": 8,
+    "emoji": "🚀",
+    "title": "Stacks & Acronyms",
+    "tagline": "The alphabet soup of the industry. Short, dense, memorizable.",
+    "dayStart": 86,
+    "dayEnd": 91
+  },
+  {
+    "id": 9,
+    "emoji": "📋",
+    "title": "DevOps, Deployment & Tooling",
+    "tagline": "How code goes from a laptop to the world. Interviewers love this.",
+    "dayStart": 92,
+    "dayEnd": 105
+  },
+  {
+    "id": 10,
+    "emoji": "🎯",
+    "title": "Product & Development Lifecycle",
+    "tagline": "The business vocabulary. You cannot work in a team without this.",
+    "dayStart": 106,
+    "dayEnd": 115
+  },
+  {
+    "id": 11,
+    "emoji": "🔒",
+    "title": "Design & UX Vocabulary",
+    "tagline": "How to work with designers and speak their language.",
+    "dayStart": 116,
+    "dayEnd": 125
+  },
+  {
+    "id": 12,
+    "emoji": "⚡",
+    "title": "Security Theory",
+    "tagline": "The module that separates hobbyists from professionals.",
+    "dayStart": 126,
+    "dayEnd": 135
+  },
+  {
+    "id": 13,
+    "emoji": "🧪",
+    "title": "Performance",
+    "tagline": "Fast sites win. Know how performance is measured and improved.",
+    "dayStart": 136,
+    "dayEnd": 145
+  },
+  {
+    "id": 14,
+    "emoji": "🤖",
+    "title": "Testing & Quality",
+    "tagline": "No more \"it works on my machine.\"",
+    "dayStart": 146,
+    "dayEnd": 155
+  },
+  {
+    "id": 15,
+    "emoji": "🌍",
+    "title": "AI & Modern Development",
+    "tagline": "The technology that is reshaping the industry. Understand it, don't fear it.",
+    "dayStart": 156,
+    "dayEnd": 165
+  },
+  {
+    "id": 16,
+    "emoji": "💼",
+    "title": "Specialized Domains",
+    "tagline": "Web development is not just building websites. Here are the niches.",
+    "dayStart": 166,
+    "dayEnd": 175
+  },
+  {
+    "id": 17,
+    "emoji": "🎯",
+    "title": "Interview Preparation",
+    "tagline": "The application layer. Everything above converges here.",
+    "dayStart": 176,
+    "dayEnd": 185
+  },
+  {
+    "id": 18,
+    "emoji": "📜",
+    "title": "History & Culture",
+    "tagline": "The stories behind the tools. This is what makes a developer interesting in a room.",
+    "dayStart": 186,
+    "dayEnd": 193
+  }
+]
