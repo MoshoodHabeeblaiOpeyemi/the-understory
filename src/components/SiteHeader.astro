@@ -4,7 +4,12 @@
 
 <header class="site-header">
   <a href="/" class="logo-link">
-    <img src="/images/logo.svg" alt="The Understory" class="logo" />
+    <img src="/images/logo.svg" alt="The Understory" class="logo logo-light" />
+    <img
+      src="/images/logo-dark.svg"
+      alt="The Understory"
+      class="logo logo-dark"
+    />
   </a>
 
   <nav id="site-nav" class="site-nav">
@@ -76,6 +81,16 @@
   .logo {
     height: 40px;
     width: auto;
+    display: block;
+  }
+
+  .logo-dark {
+    display: none;
+  }
+  :global([data-theme="dark"]) .logo-light {
+    display: none;
+  }
+  :global([data-theme="dark"]) .logo-dark {
     display: block;
   }
 
