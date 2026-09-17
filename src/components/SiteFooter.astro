@@ -1,31 +1,77 @@
 ---
-// SiteFooter.astro
-// The footer every page shares, imported by BaseLayout.
-// Small for now — this is where copyright, credit, and (soon)
-// quick links will live.
+// SiteFooter — shared sign-off. Brand mark, quick links, dynamic year.
 const year = new Date().getFullYear();
+
+const links = [
+  { href: "/modules", label: "Modules" },
+  { href: "/glossary", label: "Glossary" },
+  { href: "/field-notes", label: "Field Notes" },
+  { href: "/about", label: "About" },
+];
 ---
 
 <footer class="site-footer">
-  <p class="site-footer-copy">© {year} The Understory.</p>
-  <p class="site-footer-tagline">The layer beneath the code.</p>
+  <div class="container footer-inner">
+    <div>
+      <p class="footer-name">The Understory</p>
+      <p class="footer-tagline">The layer beneath the code.</p>
+    </div>
+    <nav class="footer-nav" aria-label="Footer">
+      {links.map((link) => <a href={link.href}>{link.label}</a>)}
+    </nav>
+  </div>
+  <p class="footer-copy container">
+    © {year} The Understory. Built slowly, in public.
+  </p>
 </footer>
 
 <style>
   .site-footer {
-    padding: var(--space-sm) var(--space-sm);
-    border-top: 1px solid #e5e5e5;
-    text-align: center;
+    margin-top: var(--space-2xl);
+    border-top: 1px solid var(--color-border);
+    padding-block: var(--space-xl) var(--space-l);
   }
 
-  .site-footer-copy {
-    margin: 0;
-    font-size: 0.9rem;
+  .footer-inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--space-m);
   }
 
-  .site-footer-tagline {
-    margin: var(--space-sm) 0 0;
-    font-size: 0.8rem;
-    opacity: 0.7;
+  .footer-name {
+    font-family: var(--font-serif);
+    font-size: var(--step-1);
+    font-weight: 600;
+  }
+
+  .footer-tagline {
+    margin-top: var(--space-3xs);
+    color: var(--color-ink-muted);
+    font-size: var(--step--1);
+  }
+
+  .footer-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-m);
+  }
+
+  .footer-nav a {
+    color: var(--color-ink-muted);
+    font-size: var(--step--1);
+    text-decoration: none;
+    transition: color var(--dur-fast) var(--ease-out);
+  }
+
+  .footer-nav a:hover {
+    color: var(--color-accent);
+  }
+
+  .footer-copy {
+    margin-top: var(--space-l);
+    color: var(--color-ink-muted);
+    font-size: var(--step--1);
   }
 </style>

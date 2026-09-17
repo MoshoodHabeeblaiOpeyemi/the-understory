@@ -1,7 +1,21 @@
 ---
+import "../styles/tokens.css";
 import "../styles/global.css";
+import "../styles/prose.css";
 import Header from "../components/SiteHeader.astro";
 import Footer from "../components/SiteFooter.astro";
+
+// Every page declares its own title + description; defaults keep stray
+// pages presentable. (OG tags, canonical, JSON-LD land in Phase 5.)
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "The Understory — the layer beneath the code",
+  description = "A 193-day reading room for self-taught developers: the vocabulary, history, and mental models the tutorials skipped.",
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -9,13 +23,53 @@ import Footer from "../components/SiteFooter.astro";
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>The Understory</title>
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <!-- Theme BEFORE first paint: the stored choice wins, otherwise the OS
+         preference. Inline because bundled scripts are deferred and would
+         let the wrong theme paint first — a visible flash on every visit. -->
+    <script is:inline>
+      (() => {
+        try {
+          let theme = localStorage.getItem("understory.theme");
+          if (theme !== "dark" && theme !== "light") {
+            const legacy = localStorage.getItem("theme");
+            theme =
+              legacy === "dark" || legacy === "light"
+                ? legacy
+                : matchMedia("(prefers-color-scheme: dark)").matches
+                  ? "dark"
+                  : "light";
+            localStorage.setItem("understory.theme", theme);
+            localStorage.removeItem("theme");
+          }
+          document.documentElement.dataset.theme = theme;
+        } catch {
+          /* Storage blocked — tokens.css falls back to the OS preference. */
+        }
+      })();
+    </script>
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta
+      name="theme-color"
+      media="(prefers-color-scheme: light)"
+      content="#f8f6ef"
+    />
+    <meta
+      name="theme-color"
+      media="(prefers-color-scheme: dark)"
+      content="#141711"
+    />
   </head>
   <body>
+    <a class="skip-link" href="#main">Skip to content</a>
     <Header />
-    <main>
+    <main id="main" tabindex="-1">
       <slot />
     </main>
     <Footer />
   </body>
 </html>
+

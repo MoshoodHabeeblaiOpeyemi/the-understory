@@ -1,33 +1,127 @@
-:root{
-    --bg-color:#ffffff;
-    --text-color:#1a1a1a;
-    --accent-color:#2d6a4f;
+/* ==========================================================================
+   GLOBAL STYLES — base layer only.
+   Page-specific styles live in their components. This file resets the
+   browser, sets typographic defaults, and provides shared layout utilities.
+   ========================================================================== */
 
-    --space-sm: 1rem;
-    --space-md: 2rem;
-    --space-lg: 3rem;
-}
-[data-theme=dark]{
-    --bg-color:#1a1a1a;
-    --text-color:#f0f0f0;
-}
+/* --- Minimal reset -------------------------------------------------------- */
 
-body{
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    margin: 0;
-    padding: 0;
-    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-
-    /* Sticky-footer trio:
-       1. body becomes a column flexbox
-       2. it stretches at least as tall as the screen
-       3. main grows to fill leftover space, pushing the footer down */
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
-main{
-    flex: 1;
+* {
+  margin: 0;
+}
+
+img,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+/* --- Typography defaults ---------------------------------------------------- */
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: var(--step-0);
+  line-height: 1.65;
+
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+
+  /* Sticky-footer trio:
+     1. body becomes a column flexbox
+     2. it stretches at least as tall as the screen
+     3. main grows to fill leftover space, pushing the footer down */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;
+}
+
+/* Headings are the book voice — serif, tight, balanced. */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  line-height: 1.2;
+  text-wrap: balance;
+  overflow-wrap: break-word;
+}
+
+/* --- Links & interaction states --------------------------------------------- */
+
+a {
+  color: var(--color-accent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+::selection {
+  background-color: color-mix(in srgb, var(--color-accent) 22%, transparent);
+}
+
+/* --- Shared layout utilities -------------------------------------------------- */
+
+/* Centers content at the site's max width with breathing room. */
+.container {
+  width: min(100% - 2 * var(--space-m), var(--container));
+  margin-inline: auto;
+}
+
+/* The reading measure — used by prose wrappers. */
+.container-narrow {
+  max-width: var(--measure);
+  margin-inline: auto;
+}
+
+/* Small-caps section label (e.g. "THE CURRICULUM"). */
+.section-label {
+  font-size: var(--step--1);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+}
+
+/* --- Accessibility -------------------------------------------------------------- */
+
+/* Keyboard users jumping past the header land straight in the content. */
+.skip-link {
+  position: absolute;
+  top: var(--space-2xs);
+  left: var(--space-2xs);
+  z-index: 100;
+  padding: var(--space-2xs) var(--space-s);
+  background-color: var(--color-surface);
+  color: var(--color-ink);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  text-decoration: none;
+  font-weight: 600;
+
+  /* Off-screen but still visible to assistive tech until focused. */
+  transform: translateY(-200%);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
 }

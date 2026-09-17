@@ -1,89 +1,197 @@
 ---
-// This is the component script. It runs at build time.
+// Site chrome: logo, primary nav, theme toggle, mobile menu.
+// The initial theme is applied pre-paint by BaseLayout's inline script —
+// this component only flips it and persists the reader's choice.
+
+const links = [
+  { href: "/modules", label: "Modules" },
+  { href: "/glossary", label: "Glossary" },
+  { href: "/field-notes", label: "Field Notes" },
+  { href: "/about", label: "About" },
+];
+
+// Build-time knowledge of the current page powers aria-current,
+// so screen readers (and the underline) know where the reader is.
+const path = Astro.url.pathname;
+const isCurrent = (href: string) => path.startsWith(href);
 ---
 
 <header class="site-header">
-  <a href="/" class="logo-link">
-    <img src="/images/logo.svg" alt="The Understory" class="logo logo-light" />
-    <img
-      src="/images/logo-dark.svg"
-      alt="The Understory"
-      class="logo logo-dark"
-    />
-  </a>
+  <div class="container header-inner">
+    <a href="/" class="logo-link" aria-label="The Understory — home">
+      <img src="/images/logo.svg" alt="" class="logo logo-light" />
+      <img src="/images/logo-dark.svg" alt="" class="logo logo-dark" />
+    </a>
 
-  <nav id="site-nav" class="site-nav">
-    <a href="/">Home</a>
-    <a href="/modules">Modules</a>
-    <a href="/glossary">Glossary</a>
-    <a href="/field-notes">Field Notes</a>
-    <a href="/about">About</a>
-  </nav>
+    <nav id="site-nav" class="site-nav" aria-label="Primary">
+      {
+        links.map((link) => (
+          <a
+            href={link.href}
+            aria-current={isCurrent(link.href) ? "page" : undefined}
+          >
+            {link.label}
+          </a>
+        ))
+      }
+    </nav>
 
-  <button id="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+    <div class="header-actions">
+      <button
+        id="theme-toggle"
+        class="theme-toggle"
+        aria-label="Toggle dark mode"
+        title="Toggle theme"
+      >
+        <svg
+          class="icon icon-sun"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <circle cx="12" cy="12" r="4"
+          /><path
+            d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"
+          /></svg
+        >
+        <svg
+          class="icon icon-moon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" /></svg
+        >
+      </button>
 
-  <button
-    class="nav-toggle"
-    aria-label="Menu"
-    aria-expanded="false"
-    aria-controls="site-nav"
-  >
-    <span class="bar"></span>
-    <span class="bar"></span>
-    <span class="bar"></span>
-  </button>
+      <button
+        class="nav-toggle"
+        aria-label="Menu"
+        aria-expanded="false"
+        aria-controls="site-nav"
+      >
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+    </div>
+  </div>
 </header>
 
+
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme) {
-      document.documentElement.setAttribute("data-theme", savedTheme);
+  // Theme toggle — the root attribute is already set (pre-paint, by
+  // BaseLayout). Flipping it is instant because every token has a twin.
+  const root = document.documentElement;
+  const toggle = document.getElementById("theme-toggle");
+
+  const syncLabel = () => {
+    toggle?.setAttribute(
+      "aria-label",
+      root.dataset.theme === "dark"
+        ? "Switch to light theme"
+        : "Switch to dark theme",
+    );
+  };
+  syncLabel();
+
+  toggle?.addEventListener("click", () => {
+    const next = root.dataset.theme === "dark" ? "light" : "dark";
+    root.dataset.theme = next;
+    try {
+      localStorage.setItem("understory.theme", next);
+    } catch {
+      /* Private mode — theme just won't persist. */
     }
+    syncLabel();
+  });
 
-    const toggleButton = document.getElementById("theme-toggle");
-    const htmlElement = document.documentElement;
+  // --- Mobile menu ---------------------------------------------------------
+  const navToggle = document.querySelector(".nav-toggle");
+  const siteNav = document.getElementById("site-nav");
 
-    if (toggleButton) {
-      toggleButton.addEventListener("click", () => {
-        const currentTheme = htmlElement.getAttribute("data-theme");
-        const newTheme = currentTheme === "dark" ? "light" : "dark";
+  const menuIsOpen = () => siteNav?.classList.contains("is-open") ?? false;
 
-        htmlElement.setAttribute("data-theme", newTheme);
-        localStorage.setItem("theme", newTheme);
-      });
+  const closeMenu = (returnFocus = false) => {
+    siteNav?.classList.remove("is-open");
+    navToggle?.setAttribute("aria-expanded", "false");
+    if (returnFocus) navToggle?.focus();
+  };
+
+  navToggle?.addEventListener("click", () => {
+    const open = siteNav?.classList.toggle("is-open") ?? false;
+    navToggle?.setAttribute("aria-expanded", String(open));
+  });
+
+  // Esc closes and hands focus back to the toggle — keyboard-first behavior.
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && menuIsOpen()) closeMenu(true);
+  });
+
+  // Clicking anywhere outside the open menu closes it.
+  document.addEventListener("click", (event) => {
+    if (
+      menuIsOpen() &&
+      event.target instanceof Node &&
+      siteNav &&
+      navToggle &&
+      !siteNav.contains(event.target) &&
+      !navToggle.contains(event.target)
+    ) {
+      closeMenu();
     }
+  });
 
-    // Hamburger menu: find the button and the nav it controls
-    const navToggle = document.querySelector(".nav-toggle");
-    const siteNav = document.getElementById("site-nav");
-
-    if (navToggle && siteNav) {
-      navToggle.addEventListener("click", () => {
-        const isOpen = siteNav.classList.toggle("is-open");
-        navToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
-      });
+  // Choosing a destination is also the moment to close the menu.
+  siteNav?.addEventListener("click", (event) => {
+    if (event.target instanceof Element && event.target.closest("a")) {
+      closeMenu();
     }
   });
 </script>
 
 <style>
   .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background-color: color-mix(in srgb, var(--color-bg) 82%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .header-inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    flex-wrap: wrap;
-    gap: var(--space-sm);
-    padding: var(--space-sm);
-    border-bottom: 1px solid #e5e5e5;
+    gap: var(--space-m);
+    min-height: var(--header-h);
   }
 
   .logo {
-    height: 40px;
+    height: 38px;
     width: auto;
     display: block;
   }
 
+  .logo-link {
+    display: block;
+    transition: opacity var(--dur-fast) var(--ease-out);
+  }
+
+  .logo-link:hover {
+    opacity: 0.8;
+  }
+
+  /* Light logo by default, dark twin in dark mode. */
   .logo-dark {
     display: none;
   }
@@ -94,59 +202,139 @@
     display: block;
   }
 
+  /* --- Desktop nav -------------------------------------------------------- */
+
   .site-nav {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: var(--space-sm);
-    width: 100%;
-    order: 3;
+    gap: var(--space-m);
   }
 
   .site-nav a {
-    text-decoration: none;
-    color: var(--text-color);
+    position: relative;
+    color: var(--color-ink);
+    font-size: var(--step-0);
     font-weight: 500;
+    text-decoration: none;
+    padding-block: var(--space-3xs);
   }
 
-  #theme-toggle {
+  /* The underline slides in from the left — quiet, 200ms, gone when you leave. */
+  .site-nav a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    border-radius: 1px;
+    background-color: var(--color-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--dur-base) var(--ease-out);
+  }
+
+  .site-nav a:hover::after,
+  .site-nav a[aria-current="page"]::after {
+    transform: scaleX(1);
+  }
+
+  .site-nav a[aria-current="page"] {
+    color: var(--color-accent);
+    font-weight: 600;
+  }
+
+  /* --- Controls ------------------------------------------------------------- */
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2xs);
+  }
+
+  .theme-toggle {
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
     background: none;
-    border: 1px solid var(--text-color);
-    border-radius: 6px;
-    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    color: var(--color-ink);
     cursor: pointer;
-    font-size: 1.25rem;
-    color: var(--text-color);
+    transition:
+      border-color var(--dur-fast) var(--ease-out),
+      background-color var(--dur-fast) var(--ease-out),
+      color var(--dur-fast) var(--ease-out),
+      transform var(--dur-fast) var(--ease-out);
   }
 
-  @media (min-width: 768px) {
-    .site-nav {
-      width: auto;
-      order: 0;
-    }
+  .theme-toggle:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+    background-color: var(--color-accent-softer);
   }
 
-  /* Hamburger button — hidden on desktop, shown on mobile */
+  .theme-toggle:active {
+    transform: scale(0.92);
+  }
+
+  .theme-toggle .icon {
+    width: 1.15rem;
+    height: 1.15rem;
+  }
+
+  /* Light mode shows the moon ("go dark"); dark mode shows the sun. */
+  .icon-sun {
+    display: none;
+  }
+  :global([data-theme="dark"]) .icon-sun {
+    display: block;
+  }
+  :global([data-theme="dark"]) .icon-moon {
+    display: none;
+  }
+
+  /* --- Hamburger --------------------------------------------------------------- */
+
   .nav-toggle {
     display: none;
     flex-direction: column;
     justify-content: center;
     gap: 5px;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0 8px;
     background: none;
-    border: 1px solid var(--text-color);
-    border-radius: 6px;
-    padding: 10px 8px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
     cursor: pointer;
   }
 
-  .nav-toggle .bar {
+  .bar {
     display: block;
     width: 20px;
     height: 2px;
-    background-color: var(--text-color);
+    border-radius: 1px;
+    background-color: var(--color-ink);
+    transition:
+      transform var(--dur-base) var(--ease-out),
+      opacity var(--dur-base) var(--ease-out);
   }
 
-  /* Mobile: hide the nav until the hamburger opens it */
+  /* Open state: the bars become an × — the menu's close button lives in place. */
+  .nav-toggle[aria-expanded="true"] .bar:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+  .nav-toggle[aria-expanded="true"] .bar:nth-child(2) {
+    opacity: 0;
+  }
+  .nav-toggle[aria-expanded="true"] .bar:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  /* --- Mobile: nav becomes a drop-down panel ---------------------------------- */
+
   @media (max-width: 767.98px) {
     .nav-toggle {
       display: flex;
@@ -154,25 +342,46 @@
 
     .site-nav {
       display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
       flex-direction: column;
-      align-items: center;
+      gap: var(--space-2xs);
+      padding: var(--space-s) var(--space-m) var(--space-m);
+      background-color: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      box-shadow: var(--shadow-md);
     }
 
     .site-nav.is-open {
       display: flex;
     }
+
     .site-nav.is-open a {
-      animation: slide-in 0.4s ease-in-out both;
+      padding-block: var(--space-2xs);
+      animation: nav-drop var(--dur-slow) var(--ease-out) both;
     }
-    @keyframes slide-in {
-      from {
-        opacity: 0;
-        transform: translateY(-15px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+
+    .site-nav.is-open a:nth-child(2) {
+      animation-delay: 40ms;
+    }
+    .site-nav.is-open a:nth-child(3) {
+      animation-delay: 80ms;
+    }
+    .site-nav.is-open a:nth-child(4) {
+      animation-delay: 120ms;
+    }
+  }
+
+  @keyframes nav-drop {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
     }
   }
 </style>

@@ -26,15 +26,15 @@ const lessonFor = (day: number) =>
   lessons.find((lesson) => lesson.data.module === module.id && lesson.data.day === day);
 ---
 
-<BaseLayout>
-  <section class="module-hero">
-    <span class="module-emoji">{module.emoji}</span>
+<BaseLayout title={`${module.title} — The Understory`} description={module.tagline}>
+  <section class="module-hero container">
+    <a class="back-link" href="/">↑ All modules</a>
+    <span class="module-emoji" aria-hidden="true">{module.emoji}</span>
+    <p class="section-label">
+      Module {module.id} of {modules.length} · Days {module.dayStart}–{module.dayEnd}
+    </p>
     <h1>{module.title}</h1>
     <p class="module-tagline">{module.tagline}</p>
-    <p class="module-range">
-      <a class="crumb-home" href="/">↑ All modules</a>
-      · Module {module.id} · Days {module.dayStart}–{module.dayEnd}
-    </p>
   </section>
 
   <ol class="day-list">
@@ -43,16 +43,19 @@ const lessonFor = (day: number) =>
         const day = module.dayStart + i;
         const lesson = lessonFor(day);
         return lesson ? (
-          <li class="day-item written">
+          <li class="day-item">
             <a class="day-link" href={`/lessons/${String(day).padStart(3, "0")}`}>
               <span class="day-number">Day {day}</span>
               <span class="day-title">{lesson.data.title}</span>
+              <span class="day-arrow" aria-hidden="true">→</span>
             </a>
           </li>
         ) : (
-          <li class="day-item coming">
-            <span class="day-number">Day {day}</span>
-            <span class="day-title">Coming soon</span>
+          <li class="day-item">
+            <span class="day-link coming">
+              <span class="day-number">Day {day}</span>
+              <span class="day-title">Coming soon</span>
+            </span>
           </li>
         );
       })
@@ -62,63 +65,128 @@ const lessonFor = (day: number) =>
 
 <style>
   .module-hero {
+    padding-block: var(--space-2xl) var(--space-xl);
     text-align: center;
-    padding: var(--space-lg) var(--space-md);
+    background: radial-gradient(
+      50rem 20rem at 50% -4rem,
+      var(--color-accent-soft),
+      transparent 70%
+    );
   }
+
+  .back-link {
+    display: inline-block;
+    margin-bottom: var(--space-m);
+    padding: 0.3em 0.9em;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    color: var(--color-ink-muted);
+    font-size: var(--step--1);
+    text-decoration: none;
+    transition:
+      color var(--dur-fast) var(--ease-out),
+      border-color var(--dur-fast) var(--ease-out),
+      background-color var(--dur-fast) var(--ease-out);
+  }
+
+  .back-link:hover {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+    background-color: var(--color-accent-softer);
+  }
+
   .module-emoji {
-    font-size: 2.4rem;
+    display: inline-grid;
+    place-items: center;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    background-color: var(--color-accent-soft);
+    font-size: 2rem;
   }
+
+  .module-hero h1 {
+    margin-top: var(--space-s);
+    font-size: var(--step-4);
+  }
+
   .module-tagline {
-    opacity: 0.75;
-    max-width: 34rem;
-    margin: 0.5rem auto 0;
-  }
-  .module-range {
-    color: var(--accent-color);
-    font-weight: 600;
+    max-width: 36rem;
+    margin: var(--space-s) auto 0;
+    color: var(--color-ink-muted);
+    font-size: var(--step-1);
+    line-height: 1.6;
   }
 
   .day-list {
     list-style: none;
-    max-width: 40rem;
-    margin: 0 auto var(--space-lg);
-    padding: 0 var(--space-md);
+    max-width: 44rem;
+    margin: 0 auto var(--space-2xl);
+    padding: 0;
     display: grid;
-    gap: var(--space-sm);
+    gap: var(--space-2xs);
   }
-  .day-item {
-    display: flex;
-    align-items: baseline;
-    gap: var(--space-md);
-    border: 1px solid color-mix(in srgb, var(--text-color) 15%, transparent);
-    border-radius: 10px;
-    padding: var(--space-sm) var(--space-md);
-  }
-  .day-number {
-    font-weight: 700;
-    color: var(--accent-color);
-    white-space: nowrap;
-  }
-  .day-item.coming {
-    opacity: 0.45;
-  }
+
   .day-link {
     display: flex;
     align-items: baseline;
-    gap: var(--space-md);
+    gap: var(--space-m);
+    padding: var(--space-s) var(--space-m);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
     color: inherit;
     text-decoration: none;
-    width: 100%;
-  }
-  .day-item.written:hover {
-    border-color: var(--accent-color);
+    transition:
+      border-color var(--dur-fast) var(--ease-out),
+      background-color var(--dur-fast) var(--ease-out),
+      transform var(--dur-fast) var(--ease-out);
   }
 
-  .crumb-home {
-    color: inherit;
-    text-decoration: none;
+  a.day-link:hover {
+    border-color: color-mix(in srgb, var(--color-accent) 45%, var(--color-border));
+    background-color: var(--color-accent-softer);
+    transform: translateX(4px);
   }
-  .crumb-home:hover {
-    text-decoration: underline;
+
+  .day-number {
+    min-width: 4.2rem;
+    color: var(--color-accent);
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .day-title {
+    flex: 1;
+    font-weight: 500;
+  }
+
+  /* The arrow waits off-stage and slides in on hover. */
+  .day-arrow {
+    color: var(--color-accent);
+    opacity: 0;
+    transform: translateX(-4px);
+    transition:
+      opacity var(--dur-fast) var(--ease-out),
+      transform var(--dur-fast) var(--ease-out);
+  }
+
+  a.day-link:hover .day-arrow {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Unwritten days: dashed frame, quiet voice — visible, not shouting. */
+  .coming {
+    border-style: dashed;
+    background-color: transparent;
+    color: var(--color-ink-muted);
+  }
+
+  .coming .day-title {
+    font-style: italic;
+    font-weight: 400;
   }
 </style>

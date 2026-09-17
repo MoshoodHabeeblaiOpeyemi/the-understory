@@ -1,0 +1,153 @@
+/* ==========================================================================
+   PROSE — the reading voice.
+   Everything a learner actually reads (lesson bodies, field notes) renders
+   inside a .prose wrapper. Book typography: serif, 1.75 leading, 68ch
+   measure. Chrome (nav, cards, buttons) stays sans — content reads serif.
+   ========================================================================== */
+
+.prose {
+  font-family: var(--font-serif);
+  font-size: var(--step-0);
+  line-height: 1.75;
+}
+
+/* Room for the sticky header when jumping to an anchor. */
+.prose :where(h2, h3, h4, [id]) {
+  scroll-margin-top: calc(var(--header-h) + var(--space-m));
+}
+
+/* --- Headings ------------------------------------------------------------- */
+
+.prose h2 {
+  margin-top: var(--space-2xl);
+  margin-bottom: var(--space-m);
+  padding-bottom: var(--space-3xs);
+  border-bottom: 1px solid var(--color-border);
+  font-size: var(--step-3);
+}
+
+.prose h3 {
+  margin-top: var(--space-xl);
+  margin-bottom: var(--space-s);
+  font-size: var(--step-2);
+}
+
+.prose h4 {
+  margin-top: var(--space-l);
+  margin-bottom: var(--space-2xs);
+  font-size: var(--step-1);
+}
+
+/* The first child shouldn't float loose under the lesson header. */
+.prose > :first-child {
+  margin-top: 0;
+}
+
+.prose > :last-child {
+  margin-bottom: 0;
+}
+
+/* --- Body text ------------------------------------------------------------- */
+
+.prose p {
+  margin-block: var(--space-m);
+}
+
+.prose a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--color-accent) 40%, transparent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: text-decoration-color var(--dur-fast) var(--ease-out);
+}
+
+.prose a:hover {
+  text-decoration-color: var(--color-accent);
+}
+
+/* --- Lists ------------------------------------------------------------------- */
+
+.prose ul,
+.prose ol {
+  margin-block: var(--space-m);
+  padding-left: var(--space-l);
+}
+
+.prose li {
+  margin-block: var(--space-2xs);
+}
+
+.prose li::marker {
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+/* --- Code ---------------------------------------------------------------------- */
+
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  background-color: color-mix(in srgb, var(--color-ink) 7%, transparent);
+  border-radius: var(--radius-sm);
+  padding: 0.1em 0.35em;
+}
+
+.prose pre {
+  margin-block: var(--space-m);
+  padding: var(--space-s) var(--space-m);
+  background-color: color-mix(in srgb, var(--color-ink) 6%, var(--color-bg));
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  line-height: 1.6;
+}
+
+/* Code blocks carry their own background — strip the inline pill. */
+.prose pre code {
+  background: none;
+  padding: 0;
+  font-size: 0.9em;
+}
+
+/* --- Blockquotes — the callout voice ---------------------------------------------- */
+
+.prose blockquote {
+  margin-block: var(--space-m);
+  padding: var(--space-s) var(--space-m);
+  border-left: 3px solid var(--color-accent);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  background-color: var(--color-accent-softer);
+  color: var(--color-ink);
+}
+
+.prose blockquote p {
+  margin-block: var(--space-2xs);
+}
+
+/* --- Dividers, tables ---------------------------------------------------------------- */
+
+.prose hr {
+  margin-block: var(--space-xl);
+  border: 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.prose table {
+  width: 100%;
+  margin-block: var(--space-m);
+  border-collapse: collapse;
+  font-size: var(--step--1);
+}
+
+.prose th,
+.prose td {
+  padding: var(--space-2xs) var(--space-s);
+  border-bottom: 1px solid var(--color-border);
+  text-align: left;
+}
+
+.prose th {
+  color: var(--color-ink-muted);
+  font-weight: 600;
+}

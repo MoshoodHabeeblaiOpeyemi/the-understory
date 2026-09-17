@@ -20,79 +20,234 @@ const totalDays = modules.reduce(
 );
 ---
 
-<BaseLayout>
+<BaseLayout title="The Understory — the layer beneath the code">
   <section class="hero">
-    <h1>The Understory</h1>
-    <p class="tagline">The layer beneath the code.</p>
-    <p class="stats">
-      {modules.length} modules · {totalDays} days · {lessons.length} lessons written
-    </p>
+    <div class="container">
+      <p class="section-label">A reading room, not a course</p>
+      <h1>The layer beneath the code.</h1>
+      <p class="lede">
+        Most tutorials teach you how to write a for-loop. The Understory
+        teaches you what actually happens when you press Enter — the
+        vocabulary, the history, and the mental models the tutorials skipped.
+        One short read a day, for 193 days.
+      </p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="/lessons/001">Start at Day 1</a>
+        <a class="btn btn-ghost" href="#curriculum">Browse the curriculum</a>
+      </div>
+      <p class="stats">
+        <span>{modules.length} modules</span>
+        <span>{totalDays} days</span>
+        <span>{lessons.length} written so far</span>
+      </p>
+    </div>
   </section>
 
-  <div class="module-grid">
-    {
-      modules.map((m) => (
-        <a href={`/modules/${m.id}`} class="module-card">
-          <span class="module-emoji">{m.emoji}</span>
-          <h2>{m.title}</h2>
-          <p class="module-tagline">{m.tagline}</p>
-          <p class="module-meta">
-            Days {m.dayStart}–{m.dayEnd} · {written(m.id)}/
-            {m.dayEnd - m.dayStart + 1} written
-          </p>
-        </a>
-      ))
-    }
-  </div>
+  <section id="curriculum" class="curriculum">
+    <div class="container">
+      <p class="section-label">The curriculum</p>
+      <div class="module-grid">
+        {
+          modules.map((m) => {
+            const count = written(m.id);
+            const total = m.dayEnd - m.dayStart + 1;
+            const pct = Math.round((count / total) * 100);
+            return (
+              <a href={`/modules/${m.id}`} class="module-card">
+                <span class="module-emoji" aria-hidden="true">
+                  {m.emoji}
+                </span>
+                <h3>{m.title}</h3>
+                <p class="module-tagline">{m.tagline}</p>
+                <p class="module-meta">
+                  Days {m.dayStart}–{m.dayEnd} · {count}/{total} written
+                </p>
+                <span class="module-bar" style={`--p: ${pct}%`} />
+              </a>
+            );
+          })
+        }
+      </div>
+    </div>
+  </section>
 </BaseLayout>
+
 
 <style>
   .hero {
+    padding-block: var(--space-3xl) var(--space-2xl);
     text-align: center;
-    padding: var(--space-lg) var(--space-md);
+    background: radial-gradient(
+      60rem 26rem at 50% -6rem,
+      var(--color-accent-soft),
+      transparent 70%
+    );
   }
-  .tagline {
-    font-size: 1.2rem;
-    opacity: 0.8;
+
+  .hero h1 {
+    margin-top: var(--space-s);
+    font-size: var(--step-5);
   }
-  .stats {
-    color: var(--accent-color);
+
+  .lede {
+    max-width: 46rem;
+    margin-inline: auto;
+    margin-top: var(--space-m);
+    color: var(--color-ink-muted);
+    font-size: var(--step-1);
+    line-height: 1.6;
+  }
+
+  .cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-s);
+    margin-top: var(--space-l);
+  }
+
+  .btn {
+    padding: 0.65em 1.35em;
+    border-radius: var(--radius-md);
+    font-size: var(--step-0);
     font-weight: 600;
+    text-decoration: none;
+    transition:
+      transform var(--dur-fast) var(--ease-out),
+      background-color var(--dur-fast) var(--ease-out),
+      border-color var(--dur-fast) var(--ease-out),
+      color var(--dur-fast) var(--ease-out);
+  }
+
+  .btn:hover {
+    transform: translateY(-1px);
+  }
+
+  .btn:active {
+    transform: translateY(0);
+  }
+
+  .btn-primary {
+    background-color: var(--color-accent);
+    color: var(--color-bg);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .btn-primary:hover {
+    background-color: var(--color-accent-strong);
+  }
+
+  .btn-ghost {
+    border: 1px solid var(--color-border);
+    color: var(--color-ink);
+  }
+
+  .btn-ghost:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+    background-color: var(--color-accent-softer);
+  }
+
+  .stats {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-xs) 0;
+    margin-top: var(--space-l);
+    color: var(--color-ink-muted);
+    font-size: var(--step--1);
+  }
+
+  .stats span:not(:first-child)::before {
+    content: "·";
+    margin-inline: var(--space-m);
+    color: var(--color-accent);
+  }
+
+  .curriculum {
+    padding-bottom: var(--space-2xl);
+    scroll-margin-top: var(--header-h);
+  }
+
+  .curriculum .section-label {
+    text-align: center;
   }
 
   .module-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: var(--space-md);
-    padding: 0 var(--space-md) var(--space-lg);
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--space-m);
+    margin-top: var(--space-l);
   }
 
   .module-card {
-    border: 1px solid color-mix(in srgb, var(--text-color) 15%, transparent);
-    border-radius: 12px;
-    padding: var(--space-md);
-    color: inherit; /* ← add: "dress like your parent, not like a link" */
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-m);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    color: inherit;
     text-decoration: none;
     transition:
-      border-color 0.2s ease,
-      transform 0.2s ease;
+      transform var(--dur-base) var(--ease-out),
+      border-color var(--dur-base) var(--ease-out),
+      box-shadow var(--dur-base) var(--ease-out);
   }
 
   .module-card:hover {
-    border-color: var(--accent-color);
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+    border-color: color-mix(
+      in srgb,
+      var(--color-accent) 45%,
+      var(--color-border)
+    );
+    box-shadow: var(--shadow-md);
   }
+
   .module-emoji {
-    font-size: 1.8rem;
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    background-color: var(--color-accent-soft);
+    font-size: 1.35rem;
   }
-  .module-card h2 {
-    margin: 0.5rem 0 0.25rem;
+
+  .module-card h3 {
+    margin-top: var(--space-s);
+    font-size: var(--step-1);
   }
+
+  /* flex-grow keeps the meta row and bar pinned to the card's floor,
+     so rows of cards align even with different tagline lengths. */
   .module-tagline {
-    opacity: 0.75;
+    flex-grow: 1;
+    margin-top: var(--space-2xs);
+    color: var(--color-ink-muted);
+    font-size: var(--step--1);
+    line-height: 1.55;
   }
+
   .module-meta {
-    color: var(--accent-color);
+    margin-top: var(--space-s);
+    color: var(--color-accent);
+    font-size: var(--step--1);
     font-weight: 600;
+  }
+
+  /* Progress hairline — the fill width arrives as --p from the template,
+     derived at build time. Adding day-004.md raises it with zero edits. */
+  .module-bar {
+    display: block;
+    height: 3px;
+    margin-top: var(--space-2xs);
+    border-radius: 2px;
+    background: linear-gradient(
+      90deg,
+      var(--color-accent) var(--p, 0%),
+      var(--color-border) var(--p, 0%)
+    );
   }
 </style>
