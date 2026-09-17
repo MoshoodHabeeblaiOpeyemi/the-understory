@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import ReaderProgress from "../components/ReaderProgress.astro";
 import { getCollection } from "astro:content";
 import modules from "../data/modules.json";
 
@@ -35,6 +36,9 @@ const totalDays = modules.reduce(
         <a class="btn btn-primary" href="/lessons/001">Start at Day 1</a>
         <a class="btn btn-ghost" href="#curriculum">Browse the curriculum</a>
       </div>
+
+      <ReaderProgress total={totalDays} />
+
       <p class="stats">
         <span>{modules.length} modules</span>
         <span>{totalDays} days</span>

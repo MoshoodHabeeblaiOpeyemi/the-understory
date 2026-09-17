@@ -62,3 +62,24 @@ export function saveSummary(slug: string, summary: string) {
     /* Storage refused — nothing to do. */
   }
 }
+
+/** Day number → storage slug ("day-042"). The one slug spelling everywhere. */
+export function slugForDay(day: number): string {
+  return `day-${String(day).padStart(3, "0")}`;
+}
+
+/** How many lessons the reader has actually completed. */
+export function countCompleted(): number {
+  return Object.values(getProgress()).filter((p) => p.completedAt).length;
+}
+
+/**
+ * The one subscription pattern: run immediately, then re-run on every
+ * progress change AND after every client-side page swap (View Transitions
+ * replace the DOM, so components must re-read state against fresh nodes).
+ */
+export function onProgressChange(fn: () => void) {
+  fn();
+  document.addEventListener(EVENT, fn);
+  document.addEventListener("astro:after-swap", () => fn());
+}

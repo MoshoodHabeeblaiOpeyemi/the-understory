@@ -1,0 +1,78 @@
+---
+// Live reader progress — "You've read X of N days" + a slim bar.
+// One component, dropped on any page. The count is read through
+// scripts/progress.ts on every progress-changed event; the total is
+// baked at build time from the registry.
+interface Props {
+  total: number;
+}
+
+const { total } = Astro.props;
+---
+
+<div class="reader-progress" data-total-days={total}>
+  <p class="reader-line">
+    You've read <span class="reader-count">0</span> of {total} days
+  </p>
+  <div class="reader-bar">
+    <span class="reader-fill"></span>
+  </div>
+</div>
+
+<style>
+  .reader-progress {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-2xs);
+    margin-top: var(--space-l);
+  }
+
+  .reader-line {
+    color: var(--color-ink-muted);
+    font-size: var(--step--1);
+  }
+
+  .reader-count {
+    color: var(--color-accent);
+    font-weight: 600;
+  }
+
+  .reader-bar {
+    width: min(16rem, 60vw);
+    height: 4px;
+    border-radius: 2px;
+    background-color: var(--color-border);
+    overflow: hidden;
+  }
+
+  .reader-fill {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background-color: var(--color-accent);
+    transform: scaleX(var(--p, 0));
+    transform-origin: left;
+    transition: transform var(--dur-slow) var(--ease-out);
+  }
+</style>
+
+<script>
+  import { countCompleted, onProgressChange } from "../scripts/progress.ts";
+
+  function render() {
+    const done = countCompleted();
+    document
+      .querySelectorAll<HTMLElement>("[data-total-days]")
+      .forEach((el) => {
+        const total = Number(el.dataset.totalDays) || 0;
+        const count = el.querySelector(".reader-count");
+        const fill = el.querySelector<HTMLElement>(".reader-fill");
+        if (count) count.textContent = String(done);
+        if (fill) {
+          fill.style.setProperty("--p", total ? String(done / total) : "0");
+        }
+      });
+  }
+
+  onProgressChange(render);
+</script>

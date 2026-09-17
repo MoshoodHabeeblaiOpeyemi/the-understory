@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import ReaderProgress from "../../components/ReaderProgress.astro";
 import { getCollection } from "astro:content";
 import modules from "../../data/modules.json";
 
@@ -39,6 +40,8 @@ const lessonFor = (day: number) =>
     </p>
     <h1>{module.title}</h1>
     <p class="module-tagline">{module.tagline}</p>
+
+    <ReaderProgress total={module.dayEnd - module.dayStart + 1} />
   </section>
 
   <ol class="day-list" data-reveal>
@@ -48,9 +51,32 @@ const lessonFor = (day: number) =>
         const lesson = lessonFor(day);
         return lesson ? (
           <li class="day-item">
-            <a class="day-link" href={`/lessons/${String(day).padStart(3, "0")}`}>
+            <a
+              class="day-link"
+              href={`/lessons/${String(day).padStart(3, "0")}`}
+              data-day={day}
+            >
               <span class="day-number">Day {day}</span>
               <span class="day-title">{lesson.data.title}</span>
+              <span class="day-read">
+                {Math.max(
+                  1,
+                  Math.round((lesson.body ?? "").split(/\s+/).length / 220),
+                )}{" "}
+                min
+              </span>
+              <span class="day-check" aria-hidden="true">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="3"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M20 6 9 17l-5-5"></path>
+                </svg>
+              </span>
               <span class="day-arrow" aria-hidden="true">→</span>
             </a>
           </li>
@@ -185,6 +211,48 @@ const lessonFor = (day: number) =>
     transform: none;
   }
 
+  /* Reading time — desktop only; the row is the schedule on small screens. */
+  .day-read {
+    color: var(--color-ink-muted);
+    font-size: var(--step--1);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 600px) {
+    .day-read {
+      display: none;
+    }
+  }
+
+  /* The check: invisible until the reader has finished that day. */
+  .day-check {
+    display: none;
+    align-self: center;
+    color: var(--color-accent);
+  }
+
+  .day-check svg {
+    display: block;
+    width: 0.9rem;
+    height: 0.9rem;
+  }
+
+  a.day-link.is-complete .day-check {
+    display: inline-flex;
+    animation: check-pop var(--dur-base) var(--ease-out);
+  }
+
+  @keyframes check-pop {
+    from {
+      opacity: 0;
+      transform: scale(0.4);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
   /* Unwritten days: dashed frame, quiet voice — visible, not shouting. */
   .coming {
     border-style: dashed;
@@ -229,3 +297,26 @@ const lessonFor = (day: number) =>
     margin-bottom: var(--space-2xl);
   }
 </style>
+
+<script>
+  import {
+    getProgress,
+    onProgressChange,
+    slugForDay,
+  } from "../../scripts/progress.ts";
+
+  // Reflect reader progress on the day rows: completed days earn their check.
+  function render() {
+    const map = getProgress();
+    document
+      .querySelectorAll<HTMLAnchorElement>(".day-link[data-day]")
+      .forEach((row) => {
+        const day = Number(row.dataset.day);
+        const done = Boolean(map[slugForDay(day)]?.completedAt);
+        row.classList.toggle("is-complete", done);
+      });
+  }
+
+  onProgressChange(render);
+</script>
+
