@@ -106,6 +106,29 @@ const blurb = (lesson.body ?? "")
         )
       }
     </nav>
+
+    <!-- Thumb-reach nav: fixed to the viewport floor on phones, so the
+         next lesson is always one tap away — never scrolled out of reach. -->
+    <nav class="thumb-nav" aria-label="Lesson navigation (quick)">
+      {
+        prev ? (
+          <a class="thumb-prev" href={`/lessons/${String(prev.data.day).padStart(3, "0")}`}>
+            <span aria-hidden="true">←</span> Previous
+          </a>
+        ) : (
+          <span />
+        )
+      }
+      {
+        next ? (
+          <a class="thumb-next" href={`/lessons/${String(next.data.day).padStart(3, "0")}`}>
+            Next <span aria-hidden="true">→</span>
+          </a>
+        ) : (
+          <span />
+        )
+      }
+    </nav>
   </article>
 </BaseLayout>
 
@@ -115,6 +138,15 @@ const blurb = (lesson.body ?? "")
     max-width: var(--measure);
     margin-inline: auto;
     padding-block: var(--space-xl) 0;
+    /* Mobile reading fix: gutters on small screens, where the container
+       max-width isn't the binding constraint. */
+    padding-inline: var(--space-s);
+  }
+
+  @media (min-width: 480px) {
+    .lesson {
+      padding-inline: var(--space-l);
+    }
   }
 
   .crumbs {
@@ -251,6 +283,61 @@ const blurb = (lesson.body ?? "")
     .pn-next {
       align-items: flex-start;
       text-align: left;
+    }
+  }
+
+  /* --- Thumb nav: mobile only, floats above content, themed --------------- */
+
+  .thumb-nav {
+    display: none;
+  }
+
+  @media (max-width: 700px) {
+    .thumb-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 40;
+      display: flex;
+      justify-content: space-between;
+      gap: var(--space-2xs);
+      padding: var(--space-2xs) var(--space-s);
+      padding-bottom: max(var(--space-2xs), env(safe-area-inset-bottom));
+      background-color: color-mix(in srgb, var(--color-bg) 88%, transparent);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid var(--color-border);
+    }
+
+    .thumb-nav a {
+      flex: 1;
+      max-width: 10rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-3xs);
+      padding: 0.6em 1em;
+      background-color: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      color: var(--color-ink);
+      font-size: var(--step--1);
+      font-weight: 600;
+      text-decoration: none;
+      box-shadow: var(--shadow-sm);
+      transition:
+        border-color var(--dur-fast) var(--ease-out),
+        color var(--dur-fast) var(--ease-out);
+    }
+
+    .thumb-nav a:active {
+      border-color: var(--color-accent);
+      color: var(--color-accent);
+    }
+
+    /* Room so the bar never covers the last line of the lesson. */
+    .lesson {
+      padding-bottom: 4.5rem;
     }
   }
 </style>

@@ -2,7 +2,110 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
-<BaseLayout>
-  <h1>Field Notes</h1>
-  <p>Stories, advice and lesson from the trail, comin soon</p>
+<BaseLayout
+  title="Field Notes — The Understory"
+  description="Stories, advice, and lessons from the trail — essays from the building of The Understory."
+>
+  <div class="container-narrow notes">
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">Field Notes</span>
+    </nav>
+
+    <p class="section-label">From the trail</p>
+    <h1>Field Notes</h1>
+    <p class="lede">
+      Short essays from the trail — what building this site teaches, the
+      dead ends, the surprises, and the craft of explaining hard things
+      simply.
+    </p>
+
+    <div class="holding">
+      <p class="holding-mark" aria-hidden="true">✎</p>
+      <p>
+        The first notes are still in the field. The essay collection ships
+        alongside the curriculum — soon.
+      </p>
+      <a class="btn-home" href="/modules">Browse the curriculum instead</a>
+    </div>
+  </div>
 </BaseLayout>
+
+<style>
+  .notes {
+    padding-block: var(--space-xl) var(--space-2xl);
+    text-align: center;
+  }
+
+  .crumbs {
+    display: flex;
+    justify-content: flex-start;
+    gap: var(--space-2xs);
+    color: var(--color-ink-muted);
+    font-size: var(--step--1);
+    margin-bottom: var(--space-l);
+  }
+
+  .crumbs a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .crumbs a:hover {
+    color: var(--color-accent);
+  }
+
+  .notes h1 {
+    margin-top: var(--space-s);
+    font-size: var(--step-4);
+  }
+
+  .lede {
+    max-width: 38rem;
+    margin: var(--space-s) auto 0;
+    color: var(--color-ink-muted);
+    font-size: var(--step-1);
+    line-height: 1.6;
+  }
+
+  .holding {
+    margin-top: var(--space-2xl);
+    padding: var(--space-xl) var(--space-m);
+    background-color: var(--color-surface);
+    border: 1px dashed var(--color-border);
+    border-radius: var(--radius-lg);
+  }
+
+  .holding-mark {
+    font-size: var(--step-3);
+    color: var(--color-accent);
+  }
+
+  .holding p {
+    margin-top: var(--space-2xs);
+    color: var(--color-ink-muted);
+  }
+
+  .btn-home {
+    display: inline-block;
+    margin-top: var(--space-m);
+    padding: 0.55em 1.2em;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    color: var(--color-ink);
+    font-weight: 600;
+    text-decoration: none;
+    transition:
+      border-color var(--dur-fast) var(--ease-out),
+      color var(--dur-fast) var(--ease-out),
+      background-color var(--dur-fast) var(--ease-out);
+  }
+
+  .btn-home:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+    background-color: var(--color-accent-softer);
+  }
+</style>
+

@@ -14,22 +14,24 @@ type SearchEntry = {
   moduleEmoji: string;
   url: string;
   blurb: string;
+  tags: string[];
 };
 
-const lessons = (await getCollection("lessons")).sort(
+const lessons = (await getCollection("lessons", ({ data }) => !data.draft)).sort(
   (a, b) => a.data.day - b.data.day,
 );
 
-// The summary derives from the body (same derivation the lesson page
-// uses). When the schema gains summary/tags in Phase 4.4, extend THIS
-// map only — nothing else in search changes.
+// Frontmatter summary wins (human-written); body-derived blurb is the
+// fallback so nothing disappears when a lesson lacks one.
 const searchIndex: SearchEntry[] = lessons.map((lesson) => {
   const meta = modules.find((m) => m.id === lesson.data.module);
-  const blurb = (lesson.body ?? "")
-    .replace(/[#*`>\[\]_]/g, " ")
-    .replace(/\s+/g, " ")
-    .trim()
-    .slice(0, 120);
+  const blurb =
+    lesson.data.summary ??
+    (lesson.body ?? "")
+      .replace(/[#*`>\[\]_]/g, " ")
+      .replace(/\s+/g, " ")
+      .trim()
+      .slice(0, 120);
   return {
     day: lesson.data.day,
     title: lesson.data.title,
@@ -38,6 +40,7 @@ const searchIndex: SearchEntry[] = lessons.map((lesson) => {
     moduleEmoji: meta ? meta.emoji : "",
     url: `/lessons/${String(lesson.data.day).padStart(3, "0")}`,
     blurb,
+    tags: lesson.data.tags,
   };
 });
 

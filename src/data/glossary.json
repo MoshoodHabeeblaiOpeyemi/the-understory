@@ -1,0 +1,12 @@
+[
+  {
+    "term": "Shell",
+    "slug": "shell",
+    "definition": "The program whose whole job is listening to your keyboard in a terminal. It reads each line, decides what you meant, and runs it — a translator between you and your computer, not magic."
+  },
+  {
+    "term": "Terminal",
+    "slug": "terminal",
+    "definition": "The window where you type commands. Once a physical device, now an app that pretends to be one — the shell lives inside it."
+  }
+]

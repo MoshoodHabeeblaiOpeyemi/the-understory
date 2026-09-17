@@ -1,8 +1,334 @@
 ---
+// The reference shelf. Canonical definitions live in data/glossary.json;
+// "Introduced in Day X" backlinks derive from lesson frontmatter —
+// add a term to a lesson's glossary: array and the link builds itself.
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+import definitions from "../data/glossary.json";
+
+type Def = { term: string; slug: string; definition: string };
+
+// Which lessons introduce which terms (slug → day numbers).
+const lessons = (await getCollection("lessons", ({ data }) => !data.draft))
+  .sort((a, b) => a.data.day - b.data.day);
+
+const introducedIn = new Map<string, number[]>();
+for (const lesson of lessons) {
+  for (const slug of lesson.data.glossary ?? []) {
+    introducedIn.set(slug, [...(introducedIn.get(slug) ?? []), lesson.data.day]);
+  }
+}
+
+// Merge: defined terms come first; frontmatter-only terms appear with
+// no definition yet (honest placeholder, and a writing to-do surfaced).
+const merged: (Def & { days: number[] })[] = [
+  ...definitions.map((d: Def) => ({ ...d, days: introducedIn.get(d.slug) ?? [] })),
+  ...[...introducedIn.entries()]
+    .filter(([slug]) => !definitions.some((d: Def) => d.slug === slug))
+    .map(([slug, days]) => ({
+      term: slug.replace(/-/g, " "),
+      slug,
+      definition: "",
+      days,
+    })),
+]
+  .sort((a, b) => a.term.localeCompare(b.term));
+
+// A–Z jump list, only letters that actually have entries.
+const letters = [
+  ...new Set(merged.map((e) => e.term[0].toUpperCase())),
+].sort();
+
+const dayUrl = (day: number) => `/lessons/${String(day).padStart(3, "0")}`;
 ---
 
-<BaseLayout>
-  <h1>Glossary</h1>
-  <p>Every term, from API to version control. Coming soon</p>
+<BaseLayout
+  title="Glossary — The Understory"
+  description="Every term The Understory teaches, from API to version control — plain definitions, and the exact day that introduced them."
+>
+  <div class="container page">
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">Glossary</span>
+    </nav>
+
+    <header class="page-head">
+      <h1>Glossary</h1>
+      <p class="page-lede">
+        Every term in the reading room, in plain language. No definition may
+        use a word this glossary hasn't already explained.
+      </p>
+    </header>
+
+    <div class="gloss-tools">
+      <div class="filter-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path>
+        </svg>
+        <input
+          type="search"
+          id="gloss-filter"
+          placeholder="Filter terms…"
+          aria-label="Filter glossary terms"
+          autocomplete="off"
+        />
+      </div>
+      <nav class="alpha" aria-label="Jump to letter">
+        <a href="#all" data-letter="all" class="is-active">All</a>
+        {letters.map((l) => <a href={`#letter-${l}`} data-letter={l}>{l}</a>)}
+      </nav>
+    </div>
+
+    <ol class="terms" id="terms" aria-live="polite">
+      {
+        merged.map((entry, i) => (
+          <li class="term" id={entry.slug} data-term={entry.term.toLowerCase()} style={`--i: ${i}`}>
+            <h2 class="term-name">{entry.term}</h2>
+            {entry.definition ? (
+              <p class="term-def">{entry.definition}</p>
+            ) : (
+              <p class="term-def term-def-missing">
+                Definition coming — first met below.
+              </p>
+            )}
+            {entry.days.length > 0 && (
+              <p class="term-days">
+                Introduced in{" "}
+                {entry.days.map((day, j) => (
+                  <>
+                    {j > 0 && ", "}
+                    <a href={dayUrl(day)}>Day {day}</a>
+                  </>
+                ))}
+              </p>
+            )}
+          </li>
+        ))
+      }
+      <li class="no-results" hidden>
+        <p>No term matches that. Try fewer letters, or start at <a href="#all">All</a>.</p>
+      </li>
+    </ol>
+  </div>
 </BaseLayout>
+
+<style>
+  .page {
+    padding-block: var(--space-l) var(--space-2xl);
+  }
+
+  .crumbs {
+    display: flex;
+    gap: var(--space-2xs);
+    color: var(--color-ink-muted);
+    font-size: var(--step--1);
+  }
+
+  .crumbs a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .crumbs a:hover {
+    color: var(--color-accent);
+  }
+
+  .page-head {
+    margin-top: var(--space-l);
+  }
+
+  .page-head h1 {
+    font-size: var(--step-4);
+  }
+
+  .page-lede {
+    margin-top: var(--space-2xs);
+    max-width: 38rem;
+    color: var(--color-ink-muted);
+    font-size: var(--step-1);
+    line-height: 1.6;
+  }
+
+  /* --- Tools row: filter + A–Z jump ------------------------------------ */
+
+  .gloss-tools {
+    position: sticky;
+    top: var(--header-h);
+    z-index: 10;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-s);
+    padding-block: var(--space-s);
+    margin-block: var(--space-l) 0;
+    background-color: color-mix(in srgb, var(--color-bg) 92%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .filter-wrap {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    flex: 1 1 220px;
+    max-width: 22rem;
+    padding: 0.45em 0.8em;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    transition: border-color var(--dur-fast) var(--ease-out);
+  }
+
+  .filter-wrap:focus-within {
+    border-color: var(--color-accent);
+  }
+
+  .filter-wrap svg {
+    width: 1rem;
+    height: 1rem;
+    color: var(--color-ink-muted);
+    flex-shrink: 0;
+  }
+
+  .filter-wrap input {
+    width: 100%;
+    border: none;
+    background: none;
+    color: var(--color-ink);
+    font: inherit;
+    font-size: var(--step--1);
+  }
+
+  .filter-wrap input:focus {
+    outline: none;
+  }
+
+  .alpha {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3xs);
+  }
+
+  .alpha a {
+    display: grid;
+    place-items: center;
+    min-width: 1.8rem;
+    height: 1.8rem;
+    padding-inline: 0.2em;
+    border-radius: var(--radius-sm);
+    color: var(--color-ink-muted);
+    font-size: var(--step--1);
+    font-weight: 600;
+    text-decoration: none;
+    transition:
+      color var(--dur-fast) var(--ease-out),
+      background-color var(--dur-fast) var(--ease-out);
+  }
+
+  .alpha a:hover {
+    color: var(--color-accent);
+    background-color: var(--color-accent-softer);
+  }
+
+  .alpha a.is-active {
+    color: var(--color-bg);
+    background-color: var(--color-accent);
+  }
+
+  /* --- The term list ------------------------------------------------------ */
+
+  .terms {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .term {
+    padding-block: var(--space-m);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .term[hidden] {
+    display: none;
+  }
+
+  .term-name {
+    font-size: var(--step-1);
+    /* Anchor jumps clear the sticky header + sticky tools row. */
+    scroll-margin-top: calc(var(--header-h) + 4.5rem);
+  }
+
+  .term-def {
+    margin-top: var(--space-2xs);
+    max-width: 44rem;
+    line-height: 1.65;
+  }
+
+  .term-def-missing {
+    color: var(--color-ink-muted);
+    font-style: italic;
+  }
+
+  .term-days {
+    margin-top: var(--space-2xs);
+    font-size: var(--step--1);
+    color: var(--color-ink-muted);
+  }
+
+  .term-days a {
+    color: var(--color-accent);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .term-days a:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .no-results {
+    padding-block: var(--space-xl);
+    color: var(--color-ink-muted);
+    text-align: center;
+    list-style: none;
+  }
+</style>
+
+<script>
+  // Instant filter + letter jump. The list itself is baked at build time;
+  // this only shows/hides — no runtime fetching, ever.
+  const filter = document.getElementById("gloss-filter") as HTMLInputElement | null;
+  const terms = Array.from(document.querySelectorAll<HTMLElement>(".term"));
+  const noResults = document.querySelector(".no-results");
+  const letterLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>(".alpha a"));
+
+  function applyFilter() {
+    if (!filter) return;
+    const q = filter.value.trim().toLowerCase();
+    let shown = 0;
+    for (const term of terms) {
+      const match = term.dataset.term?.includes(q) ?? true;
+      term.hidden = !match;
+      if (match) shown++;
+    }
+    if (noResults) noResults.hidden = shown > 0;
+  }
+
+  filter?.addEventListener("input", applyFilter);
+
+  // Letter tabs: scroll to the first term of that letter.
+  letterLinks.forEach((link) => {
+    link.addEventListener("click", (event) => {
+      const letter = link.dataset.letter;
+      if (letter === "all") return; // "All" just clears state via href="#all"
+      const target = terms.find(
+        (t) => !t.hidden && t.dataset.term?.startsWith(letter.toLowerCase() ?? ""),
+      );
+      if (!target) return;
+      event.preventDefault();
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  });
+</script>
+

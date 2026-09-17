@@ -1,8 +1,183 @@
 ---
+// The working table of contents. The homepage grid is the invitation;
+// this page is the bookmark — dense, quiet, every module one glance away.
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+import modules from "../data/modules.json";
+
+const lessons = (await getCollection("lessons", ({ data }) => !data.draft));
+
+const written = (id: number) =>
+  lessons.filter((l) => l.data.module === id).length;
+
+const totalDays = modules.reduce(
+  (sum, m) => sum + (m.dayEnd - m.dayStart + 1),
+  0,
+);
 ---
 
-<BaseLayout>
-  <h1>MODULES</h1>
-  <p>All 18 modules, from first commit to final launch. Coming soon.</p>
+<BaseLayout
+  title="Modules — The Understory"
+  description="The full 18-module table of contents: every module's day range, what it covers, and how much of it is written."
+>
+  <div class="container page">
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">Modules</span>
+    </nav>
+
+    <header class="page-head">
+      <h1>Modules</h1>
+      <p class="page-lede">
+        {modules.length} modules, {totalDays} days, from first commit to final
+        launch. The homepage tells the story; this page is the map.
+      </p>
+    </header>
+
+    <ol class="toc">
+      {
+        modules.map((m) => {
+          const total = m.dayEnd - m.dayStart + 1;
+          const count = written(m.id);
+          const pct = Math.round((count / total) * 100);
+          return (
+            <li class="toc-row">
+              <a href={`/modules/${m.id}`} class="toc-link">
+                <span class="toc-num" aria-hidden="true">
+                  {String(m.id).padStart(2, "0")}
+                </span>
+                <span class="toc-main">
+                  <span class="toc-title">{m.title}</span>
+                  <span class="toc-range">
+                    Days {m.dayStart}–{m.dayEnd} · {count}/{total} written
+                  </span>
+                </span>
+                <span class="toc-pct" style={`--p: ${pct}%`}>
+                  {pct}%
+                </span>
+              </a>
+            </li>
+          );
+        })
+      }
+    </ol>
+
+    <p class="toc-note">
+      Percentages measure <strong>written</strong> lessons (content that
+      exists). What <strong>you've read</strong> lives on each module page.
+    </p>
+  </div>
 </BaseLayout>
+
+<style>
+  .page {
+    padding-block: var(--space-l) var(--space-2xl);
+  }
+
+  .crumbs {
+    display: flex;
+    gap: var(--space-2xs);
+    color: var(--color-ink-muted);
+    font-size: var(--step--1);
+  }
+
+  .crumbs a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .crumbs a:hover {
+    color: var(--color-accent);
+  }
+
+  .page-head {
+    margin-top: var(--space-l);
+  }
+
+  .page-head h1 {
+    font-size: var(--step-4);
+  }
+
+  .page-lede {
+    margin-top: var(--space-2xs);
+    max-width: 40rem;
+    color: var(--color-ink-muted);
+    font-size: var(--step-1);
+    line-height: 1.6;
+  }
+
+  /* --- The TOC ------------------------------------------------------------ */
+
+  .toc {
+    list-style: none;
+    margin: var(--space-l) 0 0;
+    padding: 0;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .toc-row {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .toc-link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-m);
+    padding-block: var(--space-s);
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .toc-num {
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    color: var(--color-ink-muted);
+    min-width: 2.2rem;
+  }
+
+  .toc-main {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .toc-title {
+    display: block;
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: var(--step-1);
+  }
+
+  .toc-range {
+    display: block;
+    margin-top: 2px;
+    font-size: var(--step--1);
+    color: var(--color-ink-muted);
+  }
+
+  .toc-pct {
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    color: var(--color-accent);
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  .toc-note {
+    margin-top: var(--space-m);
+    color: var(--color-ink-muted);
+    font-size: var(--step--1);
+  }
+
+  /* Mobile: rows stay tappable, numbers shrink, percentage holds. */
+  @media (max-width: 560px) {
+    .toc-link {
+      gap: var(--space-s);
+    }
+
+    .toc-num {
+      min-width: 1.6rem;
+    }
+  }
+</style>
+

@@ -2,7 +2,105 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
-<BaseLayout>
-  <h1>About The Understory</h1>
-  <p>Who's behind this project, and why 167 days of code. Coming soon.</p>
+<BaseLayout
+  title="About — The Understory"
+  description="Why The Understory exists: for the self-taught developer who can build things but freezes when asked why."
+>
+  <div class="container-narrow about">
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">About</span>
+    </nav>
+
+    <p class="section-label">The why</p>
+    <h1>I kept meeting developers who could build anything — and explain nothing.</h1>
+
+    <div class="prose">
+      <p>
+        They could ship a landing page, wire up a form, follow any tutorial.
+        But ask them <em>why</em> the browser repaints, or what the DOM
+        actually is, or what happens between pressing Enter and seeing a
+        page — and the room went quiet. Not because they were slow. Because
+        nobody ever taught them the <strong>layer beneath the code</strong>.
+      </p>
+      <p>
+        That's the gap The Understory exists to close. CS grads absorb this
+        layer by osmosis — the vocabulary, the history, the mental models.
+        Self-taught developers get YouTube tutorials that teach the loop and
+        skip the ground it stands on. This is the missing ground: 193 daily
+        readings across 18 modules, from "what is a computer, really" to
+        shipping and maintaining real software.
+      </p>
+      <blockquote>
+        <p>
+          Most tutorials teach you how to write a for-loop. The Understory
+          teaches you what actually happens when you press Enter.
+        </p>
+      </blockquote>
+      <h2>Not a course. A reading room.</h2>
+      <p>
+        There are no quizzes here, no streaks, no leaderboards. One short
+        read a day, and a simple ritual borrowed from Richard Feynman:
+        <strong>read, explain it out loud, write a three-sentence summary</strong>.
+        If you can't explain it simply, the lesson isn't done — and the site
+        won't pretend it is.
+      </p>
+      <p>
+        Everything is a plain Markdown file in a public vault. No accounts,
+        no tracking, no ads. Your progress lives in your browser and nowhere
+        else. The whole thing builds to static HTML and ships from a hedge
+        of scripts to any corner of the world that asks.
+      </p>
+      <h2>Start anywhere. Or start at Day 1.</h2>
+      <p>
+        The curriculum is a path, but the rooms open in every direction:
+        browse the <a href="/modules">module map</a>, wander the
+        <a href="/glossary">glossary</a>, or search for the thing you've
+        always pretended to understand. It's yours.
+      </p>
+      <p class="signoff">
+        Built slowly, in public.<br />— The Understory
+      </p>
+    </div>
+  </div>
 </BaseLayout>
+
+<style>
+  .about {
+    padding-block: var(--space-xl) var(--space-2xl);
+  }
+
+  .crumbs {
+    display: flex;
+    gap: var(--space-2xs);
+    color: var(--color-ink-muted);
+    font-size: var(--step--1);
+    margin-bottom: var(--space-l);
+  }
+
+  .crumbs a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .crumbs a:hover {
+    color: var(--color-accent);
+  }
+
+  .about h1 {
+    margin-top: var(--space-s);
+    font-size: var(--step-4);
+    max-width: 24ch;
+  }
+
+  .prose {
+    margin-top: var(--space-l);
+  }
+
+  .signoff {
+    color: var(--color-ink-muted);
+    font-style: italic;
+  }
+</style>
+
