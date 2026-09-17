@@ -1,0 +1,100 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+import modules from "../../data/modules.json";
+
+// THE PRINTING PRESS
+// Astro calls this once at build time and asks:
+// "For [id].astro — which values of id should I print a page for?"
+// We answer with 18 objects: one per module.
+//  - params:  what goes INTO the [id] slot (must be a string)
+//  - props:   the data each printed page receives, ready to display
+export function getStaticPaths() {
+  return modules.map((m) => ({
+    params: { id: String(m.id) },
+    props: { module: m },
+  }));
+}
+
+// Everything below runs 18 times — once per printed page.
+const { module } = Astro.props;
+const lessons = await getCollection("lessons");
+
+// For the day list: look up whether THIS module's shelf has a lesson
+// filed at this exact day number.
+const lessonFor = (day: number) =>
+  lessons.find((lesson) => lesson.data.module === module.id && lesson.data.day === day);
+---
+
+<BaseLayout>
+  <section class="module-hero">
+    <span class="module-emoji">{module.emoji}</span>
+    <h1>{module.title}</h1>
+    <p class="module-tagline">{module.tagline}</p>
+    <p class="module-range">Module {module.id} · Days {module.dayStart}–{module.dayEnd}</p>
+  </section>
+
+  <ol class="day-list">
+    {
+      Array.from({ length: module.dayEnd - module.dayStart + 1 }, (_, i) => {
+        const day = module.dayStart + i;
+        const lesson = lessonFor(day);
+        return lesson ? (
+          <li class="day-item written">
+            <span class="day-number">Day {day}</span>
+            <span class="day-title">{lesson.data.title}</span>
+          </li>
+        ) : (
+          <li class="day-item coming">
+            <span class="day-number">Day {day}</span>
+            <span class="day-title">Coming soon</span>
+          </li>
+        );
+      })
+    }
+  </ol>
+</BaseLayout>
+
+<style>
+  .module-hero {
+    text-align: center;
+    padding: var(--space-lg) var(--space-md);
+  }
+  .module-emoji {
+    font-size: 2.4rem;
+  }
+  .module-tagline {
+    opacity: 0.75;
+    max-width: 34rem;
+    margin: 0.5rem auto 0;
+  }
+  .module-range {
+    color: var(--accent-color);
+    font-weight: 600;
+  }
+
+  .day-list {
+    list-style: none;
+    max-width: 40rem;
+    margin: 0 auto var(--space-lg);
+    padding: 0 var(--space-md);
+    display: grid;
+    gap: var(--space-sm);
+  }
+  .day-item {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-md);
+    border: 1px solid color-mix(in srgb, var(--text-color) 15%, transparent);
+    border-radius: 10px;
+    padding: var(--space-sm) var(--space-md);
+  }
+  .day-number {
+    font-weight: 700;
+    color: var(--accent-color);
+    white-space: nowrap;
+  }
+  .day-item.coming {
+    opacity: 0.45;
+  }
+</style>

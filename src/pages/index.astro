@@ -32,7 +32,7 @@ const totalDays = modules.reduce(
   <div class="module-grid">
     {
       modules.map((m) => (
-        <div class="module-card">
+        <a href={`/modules/${m.id}`} class="module-card">
           <span class="module-emoji">{m.emoji}</span>
           <h2>{m.title}</h2>
           <p class="module-tagline">{m.tagline}</p>
@@ -40,7 +40,7 @@ const totalDays = modules.reduce(
             Days {m.dayStart}–{m.dayEnd} · {written(m.id)}/
             {m.dayEnd - m.dayStart + 1} written
           </p>
-        </div>
+        </a>
       ))
     }
   </div>
@@ -71,6 +71,16 @@ const totalDays = modules.reduce(
     border: 1px solid color-mix(in srgb, var(--text-color) 15%, transparent);
     border-radius: 12px;
     padding: var(--space-md);
+    color: inherit; /* ← add: "dress like your parent, not like a link" */
+    text-decoration: none;
+    transition:
+      border-color 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .module-card:hover {
+    border-color: var(--accent-color);
+    transform: translateY(-2px);
   }
   .module-emoji {
     font-size: 1.8rem;
