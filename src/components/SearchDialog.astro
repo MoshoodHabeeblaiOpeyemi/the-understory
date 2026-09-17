@@ -7,7 +7,8 @@ import { getCollection } from "astro:content";
 import modules from "../data/modules.json";
 
 type SearchEntry = {
-  day: number;
+  day: number; // lessons only; field notes ride as 0
+  label: string; // result chip text: "Day 12" or "Field note"
   title: string;
   module: number;
   moduleName: string;
@@ -23,7 +24,7 @@ const lessons = (await getCollection("lessons", ({ data }) => !data.draft)).sort
 
 // Frontmatter summary wins (human-written); body-derived blurb is the
 // fallback so nothing disappears when a lesson lacks one.
-const searchIndex: SearchEntry[] = lessons.map((lesson) => {
+const lessonEntries: SearchEntry[] = lessons.map((lesson) => {
   const meta = modules.find((m) => m.id === lesson.data.module);
   const blurb =
     lesson.data.summary ??
@@ -34,6 +35,7 @@ const searchIndex: SearchEntry[] = lessons.map((lesson) => {
       .slice(0, 120);
   return {
     day: lesson.data.day,
+    label: `Day ${lesson.data.day}`,
     title: lesson.data.title,
     module: lesson.data.module,
     moduleName: meta ? meta.title : `Module ${lesson.data.module}`,
@@ -43,6 +45,24 @@ const searchIndex: SearchEntry[] = lessons.map((lesson) => {
     tags: lesson.data.tags,
   };
 });
+
+// Field notes ride the same catalog — one search finds everything (§3).
+const notes = (
+  await getCollection("fieldNotes", ({ data }) => !data.draft)
+).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const noteEntries: SearchEntry[] = notes.map((note) => ({
+  day: 0,
+  label: "Field note",
+  title: note.data.title,
+  module: 0,
+  moduleName: "Field Notes",
+  moduleEmoji: "✎",
+  url: `/field-notes/${note.id}`,
+  blurb: note.data.description,
+  tags: note.data.tags,
+}));
+
+const searchIndex: SearchEntry[] = [...lessonEntries, ...noteEntries];
 
 // JSON inside a script tag must not contain "</" — escape all "<".
 const indexJson = JSON.stringify(searchIndex).replace(/</g, "\\u003c");

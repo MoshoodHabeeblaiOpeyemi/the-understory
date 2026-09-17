@@ -22,4 +22,18 @@ const lessons = defineCollection({
   }),
 });
 
-export const collections = { lessons };
+// The second shelf: Field Notes — stand-alone essays that live outside
+// the 193-day arc. Same contract style as lessons: every file obeys the
+// schema or the build names the offender.
+const fieldNotes = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/field-notes" }),
+  schema: z.object({
+    title: z.string(),
+    date: z.coerce.date(), // "2026-09-03" in frontmatter → Date at build
+    description: z.string().max(200), // card + search excerpt
+    tags: z.array(z.string()).default([]),
+    draft: z.boolean().default(false),
+  }),
+});
+
+export const collections = { lessons, fieldNotes };

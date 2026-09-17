@@ -3,17 +3,22 @@
 // The initial theme is applied pre-paint by BaseLayout's inline script —
 // this component only flips it and persists the reader's choice.
 
+// The homepage doesn't need a Home link (the logo is home); everywhere
+// else Home leads the nav — the way back is never more than one tap.
+// Decided at build time, per page, so it's baked rather than scripted.
+const path = Astro.url.pathname;
 const links = [
+  ...(path === "/" ? [] : [{ href: "/", label: "Home" }]),
   { href: "/modules", label: "Modules" },
   { href: "/glossary", label: "Glossary" },
   { href: "/field-notes", label: "Field Notes" },
   { href: "/about", label: "About" },
 ];
 
-// Build-time knowledge of the current page powers aria-current,
-// so screen readers (and the underline) know where the reader is.
-const path = Astro.url.pathname;
-const isCurrent = (href: string) => path.startsWith(href);
+// Exact match for "/" — prefix matching would light the Home underline on
+// every page, since every path starts with "/".
+const isCurrent = (href: string) =>
+  href === "/" ? path === "/" : path.startsWith(href);
 ---
 
 <header class="site-header">

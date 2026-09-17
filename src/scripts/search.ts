@@ -12,6 +12,7 @@ const optionId = (i: number) => `search-opt-${i}`;
 
 type SearchEntry = {
   day: number;
+  label: string; // chip text: "Day 12" or "Field note"
   title: string;
   module: number;
   moduleName: string;
@@ -139,7 +140,7 @@ const bindDialog = (dialog: HTMLDialogElement) => {
     btn.className = "search-option";
     const day = document.createElement("span");
     day.className = "opt-day";
-    day.textContent = `Day ${entry.day}`;
+    day.textContent = entry.label;
     const body = document.createElement("span");
     body.className = "opt-body";
     const title = document.createElement("span");
