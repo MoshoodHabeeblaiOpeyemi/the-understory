@@ -48,12 +48,17 @@ const totalDays = modules.reduce(
       <p class="section-label">The curriculum</p>
       <div class="module-grid">
         {
-          modules.map((m) => {
+          modules.map((m, i) => {
             const count = written(m.id);
             const total = m.dayEnd - m.dayStart + 1;
             const pct = Math.round((count / total) * 100);
             return (
-              <a href={`/modules/${m.id}`} class="module-card">
+              <a
+                href={`/modules/${m.id}`}
+                class="module-card"
+                data-reveal
+                style={`--reveal-delay: ${(i % 3) * 60}ms`}
+              >
                 <span class="module-emoji" aria-hidden="true">
                   {m.emoji}
                 </span>

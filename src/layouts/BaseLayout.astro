@@ -2,6 +2,7 @@
 import "../styles/tokens.css";
 import "../styles/global.css";
 import "../styles/prose.css";
+import { ClientRouter } from "astro:transitions";
 import Header from "../components/SiteHeader.astro";
 import Footer from "../components/SiteFooter.astro";
 
@@ -62,6 +63,17 @@ const {
       media="(prefers-color-scheme: dark)"
       content="#141711"
     />
+
+    <!-- Cross-page drift: the router makes navigation SPA-smooth while the
+         ::view-transition animations in global.css do the actual moving. -->
+    <ClientRouter />
+
+    <!-- Marks the document JS-capable BEFORE first paint: the scroll-reveal
+         initial state (opacity 0) may only exist when the observer that
+         clears it exists too. No JS → no .js class → everything visible. -->
+    <script is:inline>
+      document.documentElement.classList.add("js");
+    </script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -70,6 +82,79 @@ const {
       <slot />
     </main>
     <Footer />
+
+    <script>
+      // D2 motion layer: scroll-reveal + code copy buttons. Bundled module
+      // scripts execute once per session, but the ClientRouter swaps the
+      // body on every navigation — so enhance() re-runs on astro:after-swap
+      // against the fresh nodes.
+      const enhance = () => {
+        // --- Scroll reveal ------------------------------------------------
+        const hidden = document.querySelectorAll(
+          "[data-reveal]:not([data-shown])",
+        );
+        if ("IntersectionObserver" in window) {
+          const observer = new IntersectionObserver(
+            (entries) => {
+              for (const entry of entries) {
+                if (!entry.isIntersecting) continue;
+                entry.target.setAttribute("data-shown", "");
+                entry.target.classList.add("is-shown");
+                observer.unobserve(entry.target);
+              }
+            },
+            { rootMargin: "0px 0px -10% 0px", threshold: 0.1 },
+          );
+          hidden.forEach((el) => observer.observe(el));
+        } else {
+          hidden.forEach((el) => el.classList.add("is-shown"));
+        }
+
+        // --- Copy buttons ---------------------------------------------------
+        document.querySelectorAll(".prose pre").forEach((pre) => {
+          if (pre.parentElement?.classList.contains("copy-wrap")) return;
+          const wrap = document.createElement("div");
+          wrap.className = "copy-wrap";
+          pre.replaceWith(wrap);
+          wrap.append(pre);
+
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "copy-btn";
+          btn.title = "Copy code";
+          btn.setAttribute("aria-label", "Copy code to clipboard");
+          btn.innerHTML =
+            '<svg class="icon icon-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>' +
+            '<svg class="icon icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>';
+
+          btn.addEventListener("click", async () => {
+            try {
+              await navigator.clipboard.writeText(pre.textContent ?? "");
+            } catch {
+              return; // Clipboard refused — button just stays a copy button.
+            }
+            btn.classList.add("copied");
+            window.setTimeout(() => btn.classList.remove("copied"), 1600);
+          });
+
+          wrap.append(btn);
+        });
+      };
+
+      // The entrance animation must be dropped once played, or its fill
+      // would pin these elements and defeat their hover transforms.
+      document.addEventListener("animationend", (event) => {
+        if (
+          event.target instanceof Element &&
+          event.target.hasAttribute("data-reveal")
+        ) {
+          event.target.classList.add("is-done");
+        }
+      });
+
+      enhance();
+      document.addEventListener("astro:after-swap", enhance);
+    </script>
   </body>
 </html>
 

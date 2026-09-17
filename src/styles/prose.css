@@ -151,3 +151,71 @@
   color: var(--color-ink-muted);
   font-weight: 600;
 }
+
+/* --- Copy-to-clipboard ------------------------------------------------------------ */
+
+/* The enhancement script (BaseLayout) wraps each pre in .copy-wrap so the
+   button can pin to the visible corner even while the code scrolls. */
+.prose .copy-wrap {
+  position: relative;
+}
+
+.prose .copy-wrap pre {
+  padding-right: 4.25rem;
+}
+
+.copy-btn {
+  position: absolute;
+  top: var(--space-2xs);
+  right: var(--space-2xs);
+  display: grid;
+  place-items: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-surface);
+  color: var(--color-ink-muted);
+  cursor: pointer;
+  opacity: 0;
+  transition:
+    opacity var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.copy-wrap:hover .copy-btn,
+.copy-btn:focus-visible,
+.copy-btn.copied {
+  opacity: 1;
+}
+
+.copy-btn:hover {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.copy-btn .icon {
+  width: 0.95rem;
+  height: 0.95rem;
+}
+
+.copy-btn .icon-check {
+  display: none;
+}
+
+.copy-btn.copied .icon-copy {
+  display: none;
+}
+
+.copy-btn.copied .icon-check {
+  display: block;
+}
+
+/* Touch screens have no hover — the button is always there. */
+@media (hover: none) {
+  .copy-btn {
+    opacity: 1;
+  }
+}

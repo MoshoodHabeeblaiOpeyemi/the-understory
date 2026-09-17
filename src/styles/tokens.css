@@ -34,6 +34,24 @@
   --color-accent-soft: color-mix(in srgb, var(--color-accent) 12%, transparent);
   --color-accent-softer: color-mix(in srgb, var(--color-accent) 6%, transparent);
 
+  /* ---- Scrollbar ---------------------------------------------------------- */
+
+  /* A quiet pill that belongs to the theme, not the operating system. */
+  --scrollbar-thumb: light-dark(rgba(35, 40, 33, 0.25), rgba(236, 232, 219, 0.2));
+  --scrollbar-thumb-hover: light-dark(
+    rgba(35, 40, 33, 0.45),
+    rgba(236, 232, 219, 0.4)
+  );
+
+  /* ---- Footer: the soil beneath the page ------------------------------------ */
+
+  /* A deeper shade in both themes — the footer is a room, not a rule. */
+  --color-footer-bg: light-dark(#202b23, #0d110d);
+  --color-footer-ink: light-dark(#e9eee2, #d3dcc8);
+  --color-footer-ink-muted: light-dark(#9db1a0, #8b9884);
+  --color-footer-border: light-dark(#33423a, #212a22);
+  --color-footer-accent: light-dark(#6cbb92, #93d6b3);
+
   /* ---- Typography -------------------------------------------------------- */
 
   --font-sans: system-ui, -apple-system, "Segoe UI", Roboto,

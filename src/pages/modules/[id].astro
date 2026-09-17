@@ -28,7 +28,11 @@ const lessonFor = (day: number) =>
 
 <BaseLayout title={`${module.title} — The Understory`} description={module.tagline}>
   <section class="module-hero container">
-    <a class="back-link" href="/">↑ All modules</a>
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">Module {module.id}</span>
+    </nav>
     <span class="module-emoji" aria-hidden="true">{module.emoji}</span>
     <p class="section-label">
       Module {module.id} of {modules.length} · Days {module.dayStart}–{module.dayEnd}
@@ -37,7 +41,7 @@ const lessonFor = (day: number) =>
     <p class="module-tagline">{module.tagline}</p>
   </section>
 
-  <ol class="day-list">
+  <ol class="day-list" data-reveal>
     {
       Array.from({ length: module.dayEnd - module.dayStart + 1 }, (_, i) => {
         const day = module.dayStart + i;
@@ -61,6 +65,10 @@ const lessonFor = (day: number) =>
       })
     }
   </ol>
+
+  <p class="end-door">
+    <a class="back-link" href="/">↑ All modules</a>
+  </p>
 </BaseLayout>
 
 <style>
@@ -76,7 +84,6 @@ const lessonFor = (day: number) =>
 
   .back-link {
     display: inline-block;
-    margin-bottom: var(--space-m);
     padding: 0.3em 0.9em;
     border: 1px solid var(--color-border);
     border-radius: 999px;
@@ -188,5 +195,37 @@ const lessonFor = (day: number) =>
   .coming .day-title {
     font-style: italic;
     font-weight: 400;
+  }
+
+  /* Wayfinding: Home is always one tap away — top and bottom of the list. */
+  .crumbs {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-2xs);
+    margin-bottom: var(--space-m);
+    color: var(--color-ink-muted);
+    font-size: var(--step--1);
+  }
+
+  .crumbs a {
+    color: inherit;
+    text-decoration: none;
+    transition: color var(--dur-fast) var(--ease-out);
+  }
+
+  .crumbs a:hover {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .crumbs [aria-current="page"] {
+    color: var(--color-ink);
+    font-weight: 600;
+  }
+
+  .end-door {
+    text-align: center;
+    margin-bottom: var(--space-2xl);
   }
 </style>

@@ -19,8 +19,21 @@ const isCurrent = (href: string) => path.startsWith(href);
 <header class="site-header">
   <div class="container header-inner">
     <a href="/" class="logo-link" aria-label="The Understory — home">
-      <img src="/images/logo.svg" alt="" class="logo logo-light" />
-      <img src="/images/logo-dark.svg" alt="" class="logo logo-dark" />
+      <!-- Same geometry as favicon.svg, painted with theme tokens so the
+          mark swaps with the site like every other surface. -->
+      <svg class="mark" viewBox="0 0 64 64" aria-hidden="true">
+        <rect class="mark-tile" width="64" height="64" rx="14" />
+        <path class="mark-cut mark-stem" d="M32 49V31" />
+        <path
+          class="mark-cut"
+          d="M32 36C23.5 36 18 30.5 17 21C26.5 22 32 27.5 32 36Z"
+        />
+        <path
+          class="mark-cut"
+          d="M32 30C32 21 37.5 15.5 47 14.5C46 24 40.5 30 32 30Z"
+        />
+      </svg>
+      <span class="wordmark">The Understory</span>
     </a>
 
     <nav id="site-nav" class="site-nav" aria-label="Primary">
@@ -88,74 +101,93 @@ const isCurrent = (href: string) => path.startsWith(href);
 
 
 <script>
-  // Theme toggle — the root attribute is already set (pre-paint, by
-  // BaseLayout). Flipping it is instant because every token has a twin.
-  const root = document.documentElement;
-  const toggle = document.getElementById("theme-toggle");
+  // Chrome behaviors. Two facts shape this script:
+  //  1. The ClientRouter swaps the header on every navigation, killing
+  //     its listeners.
+  //  2. Bundled module scripts execute only once per session.
+  // So bindChrome() runs on load AND after every astro:after-swap, and a
+  // data-bound guard keeps a double call from attaching listeners twice.
+  const bindChrome = () => {
+    // --- Theme toggle -------------------------------------------------------
+    const root = document.documentElement;
+    const toggle = document.getElementById("theme-toggle");
 
-  const syncLabel = () => {
-    toggle?.setAttribute(
-      "aria-label",
-      root.dataset.theme === "dark"
-        ? "Switch to light theme"
-        : "Switch to dark theme",
-    );
-  };
-  syncLabel();
-
-  toggle?.addEventListener("click", () => {
-    const next = root.dataset.theme === "dark" ? "light" : "dark";
-    root.dataset.theme = next;
-    try {
-      localStorage.setItem("understory.theme", next);
-    } catch {
-      /* Private mode — theme just won't persist. */
+    if (toggle && !toggle.dataset.bound) {
+      toggle.dataset.bound = "1";
+      const syncLabel = () => {
+        toggle.setAttribute(
+          "aria-label",
+          root.dataset.theme === "dark"
+            ? "Switch to light theme"
+            : "Switch to dark theme",
+        );
+      };
+      syncLabel();
+      toggle.addEventListener("click", () => {
+        const next = root.dataset.theme === "dark" ? "light" : "dark";
+        root.dataset.theme = next;
+        try {
+          localStorage.setItem("understory.theme", next);
+        } catch {
+          /* Private mode — theme just won't persist. */
+        }
+        syncLabel();
+      });
     }
-    syncLabel();
-  });
 
-  // --- Mobile menu ---------------------------------------------------------
-  const navToggle = document.querySelector(".nav-toggle");
-  const siteNav = document.getElementById("site-nav");
+    // --- Mobile menu ----------------------------------------------------------
+    const navToggle = document.querySelector(".nav-toggle");
+    const siteNav = document.getElementById("site-nav");
+    if (!navToggle || !siteNav || navToggle.dataset.bound) return;
+    navToggle.dataset.bound = "1";
 
-  const menuIsOpen = () => siteNav?.classList.contains("is-open") ?? false;
+    const closeMenu = (returnFocus = false) => {
+      siteNav.classList.remove("is-open");
+      navToggle.setAttribute("aria-expanded", "false");
+      if (returnFocus) navToggle.focus();
+    };
 
-  const closeMenu = (returnFocus = false) => {
-    siteNav?.classList.remove("is-open");
-    navToggle?.setAttribute("aria-expanded", "false");
-    if (returnFocus) navToggle?.focus();
+    navToggle.addEventListener("click", () => {
+      const open = siteNav.classList.toggle("is-open");
+      navToggle.setAttribute("aria-expanded", String(open));
+    });
+
+    // Choosing a destination is also the moment to close the menu.
+    siteNav.addEventListener("click", (event) => {
+      if (event.target instanceof Element && event.target.closest("a")) {
+        closeMenu();
+      }
+    });
   };
 
-  navToggle?.addEventListener("click", () => {
-    const open = siteNav?.classList.toggle("is-open") ?? false;
-    navToggle?.setAttribute("aria-expanded", String(open));
-  });
-
-  // Esc closes and hands focus back to the toggle — keyboard-first behavior.
+  // Document-level listeners survive the swap — register once, and look up
+  // the live menu each time instead of holding stale node references.
   document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && menuIsOpen()) closeMenu(true);
+    if (event.key !== "Escape") return;
+    const siteNav = document.getElementById("site-nav");
+    if (!siteNav?.classList.contains("is-open")) return;
+    siteNav.classList.remove("is-open");
+    const navToggle = document.querySelector(".nav-toggle");
+    navToggle?.setAttribute("aria-expanded", "false");
+    navToggle?.focus();
   });
 
-  // Clicking anywhere outside the open menu closes it.
   document.addEventListener("click", (event) => {
+    const siteNav = document.getElementById("site-nav");
+    const navToggle = document.querySelector(".nav-toggle");
+    if (!siteNav?.classList.contains("is-open")) return;
     if (
-      menuIsOpen() &&
       event.target instanceof Node &&
-      siteNav &&
-      navToggle &&
       !siteNav.contains(event.target) &&
-      !navToggle.contains(event.target)
+      !navToggle?.contains(event.target)
     ) {
-      closeMenu();
+      siteNav.classList.remove("is-open");
+      navToggle?.setAttribute("aria-expanded", "false");
     }
   });
 
-  // Choosing a destination is also the moment to close the menu.
-  siteNav?.addEventListener("click", (event) => {
-    if (event.target instanceof Element && event.target.closest("a")) {
-      closeMenu();
-    }
-  });
+  bindChrome();
+  document.addEventListener("astro:after-swap", bindChrome);
 </script>
 
 <style>
@@ -176,30 +208,55 @@ const isCurrent = (href: string) => path.startsWith(href);
     min-height: var(--header-h);
   }
 
-  .logo {
-    height: 38px;
-    width: auto;
-    display: block;
-  }
-
+  /* The mark IS the favicon — same geometry, painted with tokens so tile
+     and sprout swap with the theme like every other surface. */
   .logo-link {
-    display: block;
-    transition: opacity var(--dur-fast) var(--ease-out);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    text-decoration: none;
   }
 
-  .logo-link:hover {
-    opacity: 0.8;
+  .mark {
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    transition: transform var(--dur-base) var(--ease-out);
   }
 
-  /* Light logo by default, dark twin in dark mode. */
-  .logo-dark {
-    display: none;
+  .logo-link:hover .mark {
+    transform: rotate(-6deg) scale(1.06);
   }
-  :global([data-theme="dark"]) .logo-light {
-    display: none;
+
+  .mark-tile {
+    fill: var(--color-accent);
   }
-  :global([data-theme="dark"]) .logo-dark {
-    display: block;
+
+  .mark-cut {
+    fill: var(--color-bg);
+  }
+
+  .mark-stem {
+    stroke: var(--color-bg);
+    stroke-width: 4.5;
+    stroke-linecap: round;
+    fill: none;
+  }
+
+  .wordmark {
+    font-family: var(--font-serif);
+    font-size: var(--step-1);
+    font-weight: 700;
+    color: var(--color-ink);
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+  }
+
+  /* Tiny screens: the mark alone, app-icon style. */
+  @media (max-width: 419.98px) {
+    .wordmark {
+      display: none;
+    }
   }
 
   /* --- Desktop nav -------------------------------------------------------- */

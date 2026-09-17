@@ -1,8 +1,8 @@
 ---
-// SiteFooter — shared sign-off. Brand mark, quick links, dynamic year.
+// SiteFooter — the soil beneath the page: a shaded room, not a ruled strip.
 const year = new Date().getFullYear();
 
-const links = [
+const explore = [
   { href: "/modules", label: "Modules" },
   { href: "/glossary", label: "Glossary" },
   { href: "/field-notes", label: "Field Notes" },
@@ -11,67 +11,184 @@ const links = [
 ---
 
 <footer class="site-footer">
-  <div class="container footer-inner">
-    <div>
-      <p class="footer-name">The Understory</p>
-      <p class="footer-tagline">The layer beneath the code.</p>
+  <div class="container footer-grid">
+    <div class="footer-brand">
+      <a class="footer-mark" href="/" aria-label="The Understory — home">
+        <svg class="mark" viewBox="0 0 64 64" aria-hidden="true">
+          <rect class="f-tile" width="64" height="64" rx="14" />
+          <path class="f-cut f-stem" d="M32 49V31" />
+          <path
+            class="f-cut"
+            d="M32 36C23.5 36 18 30.5 17 21C26.5 22 32 27.5 32 36Z"
+          />
+          <path
+            class="f-cut"
+            d="M32 30C32 21 37.5 15.5 47 14.5C46 24 40.5 30 32 30Z"
+          />
+        </svg>
+        <span class="footer-name">The Understory</span>
+      </a>
+      <p class="footer-mission">
+        A 193-day reading room for self-taught developers — the vocabulary,
+        the history, and the mental models the tutorials skipped.
+      </p>
     </div>
-    <nav class="footer-nav" aria-label="Footer">
-      {links.map((link) => <a href={link.href}>{link.label}</a>)}
+
+    <nav class="footer-col" aria-label="Footer">
+      <p class="footer-heading">Explore</p>
+      <ul>
+        {
+          explore.map((link) => (
+            <li>
+              <a href={link.href}>{link.label}</a>
+            </li>
+          ))
+        }
+      </ul>
     </nav>
+
+    <div class="footer-col">
+      <p class="footer-heading">The daily loop</p>
+      <ol class="footer-loop">
+        <li>Read, slowly.</li>
+        <li>Explain it out loud.</li>
+        <li>Write three sentences.</li>
+      </ol>
+    </div>
   </div>
-  <p class="footer-copy container">
-    © {year} The Understory. Built slowly, in public.
-  </p>
+
+  <div class="container footer-base">
+    <p>© {year} The Understory</p>
+    <p>Built slowly, in public.</p>
+  </div>
 </footer>
 
 <style>
+  /* No divider on top — the background change IS the separation. */
   .site-footer {
-    margin-top: var(--space-2xl);
-    border-top: 1px solid var(--color-border);
-    padding-block: var(--space-xl) var(--space-l);
+    margin-top: var(--space-3xl);
+    background-color: var(--color-footer-bg);
+    color: var(--color-footer-ink);
+    padding-block: var(--space-2xl) var(--space-l);
   }
 
-  .footer-inner {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: var(--space-m);
+  .footer-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--space-xl) var(--space-2xl);
+  }
+
+  .footer-mark {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    text-decoration: none;
+  }
+
+  .footer-mark .mark {
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+    transition: transform var(--dur-base) var(--ease-out);
+  }
+
+  .footer-mark:hover .mark {
+    transform: rotate(-6deg) scale(1.05);
+  }
+
+  /* The mark's cut-outs take the footer's own soil color, so it reads as
+     engraved in the floor rather than pasted on top of it. */
+  .f-tile {
+    fill: var(--color-footer-accent);
+  }
+
+  .f-cut {
+    fill: var(--color-footer-bg);
+  }
+
+  .f-stem {
+    stroke: var(--color-footer-bg);
+    stroke-width: 4.5;
+    stroke-linecap: round;
+    fill: none;
   }
 
   .footer-name {
     font-family: var(--font-serif);
     font-size: var(--step-1);
+    font-weight: 700;
+    color: var(--color-footer-ink);
+  }
+
+  .footer-mission {
+    max-width: 30rem;
+    margin-top: var(--space-s);
+    color: var(--color-footer-ink-muted);
+    font-size: var(--step--1);
+    line-height: 1.7;
+  }
+
+  .footer-heading {
+    margin-bottom: var(--space-s);
+    color: var(--color-footer-ink-muted);
+    font-size: var(--step--1);
     font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
   }
 
-  .footer-tagline {
-    margin-top: var(--space-3xs);
-    color: var(--color-ink-muted);
-    font-size: var(--step--1);
+  .footer-col ul,
+  .footer-col ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-2xs);
   }
 
-  .footer-nav {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-m);
-  }
-
-  .footer-nav a {
-    color: var(--color-ink-muted);
-    font-size: var(--step--1);
+  .footer-col a {
+    color: var(--color-footer-ink-muted);
     text-decoration: none;
     transition: color var(--dur-fast) var(--ease-out);
   }
 
-  .footer-nav a:hover {
-    color: var(--color-accent);
+  .footer-col a:hover {
+    color: var(--color-footer-accent);
   }
 
-  .footer-copy {
-    margin-top: var(--space-l);
-    color: var(--color-ink-muted);
+  .footer-loop {
+    color: var(--color-footer-ink-muted);
     font-size: var(--step--1);
+    counter-reset: loop;
+  }
+
+  .footer-loop li {
+    counter-increment: loop;
+  }
+
+  .footer-loop li::before {
+    content: counter(loop) ".";
+    margin-right: var(--space-2xs);
+    color: var(--color-footer-accent);
+    font-weight: 600;
+  }
+
+  .footer-base {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-2xs) var(--space-m);
+    margin-top: var(--space-2xl);
+    padding-top: var(--space-m);
+    border-top: 1px solid var(--color-footer-border);
+    color: var(--color-footer-ink-muted);
+    font-size: var(--step--1);
+  }
+
+  @media (max-width: 767.98px) {
+    .footer-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-xl);
+    }
   }
 </style>

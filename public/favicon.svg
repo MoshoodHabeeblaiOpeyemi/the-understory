@@ -1,14 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <style>
-    .leaf { fill: #2d6a4f; }
-    .stem { stroke: #2d6a4f; }
+    .tile { fill: #2d6a4f; }
+    .cut { fill: #f8f6ef; stroke: #f8f6ef; }
+    .stem { stroke-width: 4.5; stroke-linecap: round; fill: none; }
     @media (prefers-color-scheme: dark) {
-      .leaf { fill: #6cbb92; }
-      .stem { stroke: #6cbb92; }
+      .tile { fill: #6cbb92; }
+      .cut { fill: #141711; stroke: #141711; }
     }
   </style>
-  <path class="leaf" d="M16 17C8.5 17 4 13 4 5.5 11.5 5.5 16 10 16 17Z"/>
-  <path class="leaf" d="M16 13C16 6 21 1.5 28 1.5 28 8.5 23 13 16 13Z"/>
-  <path class="stem" d="M16 30V15" stroke-width="2.6" stroke-linecap="round"/>
+  <rect class="tile" width="64" height="64" rx="14"/>
+  <path class="cut stem" d="M32 49V31"/>
+  <path class="cut" d="M32 36C23.5 36 18 30.5 17 21C26.5 22 32 27.5 32 36Z"/>
+  <path class="cut" d="M32 30C32 21 37.5 15.5 47 14.5C46 24 40.5 30 32 30Z"/>
 </svg>
+
 
