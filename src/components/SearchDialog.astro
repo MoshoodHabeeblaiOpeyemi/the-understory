@@ -1,0 +1,314 @@
+---
+// ⌘K search — the reading room's card catalog.
+// The index is BAKED AT BUILD TIME from the vault (§3: dropping in
+// day-004.md registers it in search with zero template changes).
+// The behavior script is listener-only: it never fetches at runtime.
+import { getCollection } from "astro:content";
+import modules from "../data/modules.json";
+
+type SearchEntry = {
+  day: number;
+  title: string;
+  module: number;
+  moduleName: string;
+  moduleEmoji: string;
+  url: string;
+  blurb: string;
+};
+
+const lessons = (await getCollection("lessons")).sort(
+  (a, b) => a.data.day - b.data.day,
+);
+
+// The summary derives from the body (same derivation the lesson page
+// uses). When the schema gains summary/tags in Phase 4.4, extend THIS
+// map only — nothing else in search changes.
+const searchIndex: SearchEntry[] = lessons.map((lesson) => {
+  const meta = modules.find((m) => m.id === lesson.data.module);
+  const blurb = (lesson.body ?? "")
+    .replace(/[#*`>\[\]_]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 120);
+  return {
+    day: lesson.data.day,
+    title: lesson.data.title,
+    module: lesson.data.module,
+    moduleName: meta ? meta.title : `Module ${lesson.data.module}`,
+    moduleEmoji: meta ? meta.emoji : "",
+    url: `/lessons/${String(lesson.data.day).padStart(3, "0")}`,
+    blurb,
+  };
+});
+
+// JSON inside a script tag must not contain "</" — escape all "<".
+const indexJson = JSON.stringify(searchIndex).replace(/</g, "\\u003c");
+---
+
+<dialog class="search-dialog" aria-label="Search lessons">
+  <div class="search-head">
+    <svg
+      class="search-glyph"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      aria-hidden="true"
+    >
+      <circle cx="11" cy="11" r="7"></circle>
+      <path d="m20 20-3.5-3.5"></path>
+    </svg>
+    <input
+      id="search-input"
+      class="search-input"
+      type="search"
+      placeholder="Search days, titles, topics…"
+      autocomplete="off"
+      spellcheck="false"
+      aria-controls="search-listbox"
+      aria-autocomplete="list"
+    />
+    <button
+      type="button"
+      class="search-close"
+      data-search-close
+      aria-label="Close search"
+    >
+      <kbd>Esc</kbd>
+    </button>
+  </div>
+
+  <div class="search-recents" data-recents hidden>
+    <p class="search-recent-label">Recent</p>
+    <div class="recent-rows"></div>
+  </div>
+
+  <ul
+    id="search-listbox"
+    class="search-results"
+    role="listbox"
+    aria-label="Search results"
+  ></ul>
+
+  <div class="search-foot" aria-hidden="true">
+    <span><kbd>↑</kbd><kbd>↓</kbd> navigate</span>
+    <span><kbd>↵</kbd> open</span>
+    <span><kbd>Esc</kbd> close</span>
+  </div>
+</dialog>
+
+<script
+  is:inline
+  type="application/json"
+  id="search-index"
+  set:html={indexJson}
+></script>
+
+<style>
+  dialog.search-dialog {
+    width: min(92vw, 34rem);
+    margin: 10vh auto auto;
+    padding: 0;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background-color: var(--color-surface);
+    color: var(--color-ink);
+    box-shadow: var(--shadow-md);
+  }
+
+  dialog.search-dialog::backdrop {
+    background-color: color-mix(in srgb, var(--color-bg) 55%, transparent);
+    backdrop-filter: blur(4px);
+  }
+
+  dialog[open].search-dialog {
+    animation: search-in var(--dur-base) var(--ease-out);
+  }
+
+  @keyframes search-in {
+    from {
+      opacity: 0;
+      transform: translateY(-8px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .search-head {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    padding: var(--space-s) var(--space-m);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .search-glyph {
+    flex: none;
+    width: 1.1rem;
+    height: 1.1rem;
+    color: var(--color-ink-muted);
+  }
+
+  .search-input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    background: none;
+    color: var(--color-ink);
+    font: inherit;
+    font-size: var(--step-0);
+    caret-color: var(--color-accent);
+  }
+
+  .search-input:focus {
+    outline: none;
+  }
+
+  .search-input::placeholder {
+    color: var(--color-ink-muted);
+  }
+
+  .search-input::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+  }
+
+  .search-close {
+    padding: 0;
+    background: none;
+    border: 0;
+    cursor: pointer;
+  }
+
+  kbd {
+    padding: 0.1em 0.45em;
+    border: 1px solid var(--color-border);
+    border-bottom-width: 2px;
+    border-radius: var(--radius-sm);
+    background-color: var(--color-bg);
+    color: var(--color-ink-muted);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+  }
+
+  .search-recents {
+    padding: var(--space-2xs) var(--space-2xs) var(--space-2xs);
+  }
+
+  .search-recent-label {
+    padding-inline: var(--space-s);
+    margin-bottom: var(--space-3xs);
+    color: var(--color-ink-muted);
+    font-size: var(--step--1);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .search-results {
+    list-style: none;
+    margin: 0;
+    padding: var(--space-2xs);
+    max-height: min(50vh, 24rem);
+    overflow-y: auto;
+  }
+
+  .search-option {
+    display: flex;
+    align-items: center;
+    gap: var(--space-s);
+    width: 100%;
+    padding: var(--space-2xs) var(--space-s);
+    border-radius: var(--radius-md);
+    color: inherit;
+    text-decoration: none;
+    text-align: left;
+  }
+
+  button.search-option {
+    background: none;
+    border: 0;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .search-option[aria-selected="true"] {
+    background-color: var(--color-accent-softer);
+  }
+
+  .opt-day {
+    flex: none;
+    min-width: 4.6rem;
+    color: var(--color-accent);
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    font-weight: 600;
+  }
+
+  .opt-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    min-width: 0;
+  }
+
+  .opt-title {
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .opt-title mark {
+    background: var(--color-accent-soft);
+    color: inherit;
+    border-radius: 2px;
+  }
+
+  .opt-mod {
+    color: var(--color-ink-muted);
+    font-size: var(--step--1);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .search-empty {
+    padding: var(--space-l) var(--space-m);
+    color: var(--color-ink-muted);
+    text-align: center;
+  }
+
+  .search-empty a {
+    color: var(--color-accent);
+  }
+
+  .search-foot {
+    display: flex;
+    gap: var(--space-m);
+    padding: var(--space-2xs) var(--space-m);
+    border-top: 1px solid var(--color-border);
+    color: var(--color-ink-muted);
+    font-size: var(--step--1);
+  }
+
+  .search-foot span {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3xs);
+  }
+
+  @media (max-width: 700px) {
+    .search-foot {
+      display: none;
+    }
+  }
+</style>
+<script>
+  // Behavior lives in scripts/search.ts — this one-line script is what
+  // pulls it into the bundle (module code runs once per session; it
+  // re-binds itself against fresh nodes after every View-Transition swap).
+  import "../scripts/search.ts";
+</script>

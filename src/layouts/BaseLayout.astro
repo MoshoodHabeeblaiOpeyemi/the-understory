@@ -5,6 +5,7 @@ import "../styles/prose.css";
 import { ClientRouter } from "astro:transitions";
 import Header from "../components/SiteHeader.astro";
 import Footer from "../components/SiteFooter.astro";
+import SearchDialog from "../components/SearchDialog.astro";
 
 // Every page declares its own title + description; defaults keep stray
 // pages presentable. (OG tags, canonical, JSON-LD land in Phase 5.)
@@ -82,6 +83,9 @@ const {
       <slot />
     </main>
     <Footer />
+
+    <!-- The ⌘K dialog. Mounted on every page; inert until opened. -->
+    <SearchDialog />
 
     <script>
       // D2 motion layer: scroll-reveal + code copy buttons. Bundled module
