@@ -31,7 +31,10 @@ const lessonFor = (day: number) =>
     <span class="module-emoji">{module.emoji}</span>
     <h1>{module.title}</h1>
     <p class="module-tagline">{module.tagline}</p>
-    <p class="module-range">Module {module.id} · Days {module.dayStart}–{module.dayEnd}</p>
+    <p class="module-range">
+      <a class="crumb-home" href="/">↑ All modules</a>
+      · Module {module.id} · Days {module.dayStart}–{module.dayEnd}
+    </p>
   </section>
 
   <ol class="day-list">
@@ -41,8 +44,10 @@ const lessonFor = (day: number) =>
         const lesson = lessonFor(day);
         return lesson ? (
           <li class="day-item written">
-            <span class="day-number">Day {day}</span>
-            <span class="day-title">{lesson.data.title}</span>
+            <a class="day-link" href={`/lessons/${String(day).padStart(3, "0")}`}>
+              <span class="day-number">Day {day}</span>
+              <span class="day-title">{lesson.data.title}</span>
+            </a>
           </li>
         ) : (
           <li class="day-item coming">
@@ -96,5 +101,24 @@ const lessonFor = (day: number) =>
   }
   .day-item.coming {
     opacity: 0.45;
+  }
+  .day-link {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-md);
+    color: inherit;
+    text-decoration: none;
+    width: 100%;
+  }
+  .day-item.written:hover {
+    border-color: var(--accent-color);
+  }
+
+  .crumb-home {
+    color: inherit;
+    text-decoration: none;
+  }
+  .crumb-home:hover {
+    text-decoration: underline;
   }
 </style>
