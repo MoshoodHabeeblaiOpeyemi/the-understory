@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import MarkComplete from "../../components/MarkComplete.astro";
 import { getCollection, render } from "astro:content";
 import modules from "../../data/modules.json";
 
@@ -74,6 +75,8 @@ const blurb = (lesson.body ?? "")
     <div class="prose lesson-body">
       <Content />
     </div>
+
+    <MarkComplete slug={`day-${String(lesson.data.day).padStart(3, "0")}`} />
 
     <nav class="lesson-nav" aria-label="Lesson navigation">
       {

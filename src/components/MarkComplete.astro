@@ -1,0 +1,220 @@
+---
+// The daily loop, as UI: explain → summarize → mark complete.
+// State lives in scripts/progress.ts (the single source of truth);
+// this component is one of its listeners.
+interface Props {
+  slug: string;
+}
+
+const { slug } = Astro.props;
+---
+
+<section class="loop" data-slug={slug}>
+  <p class="section-label">Close the loop</p>
+
+  <label class="loop-label" for="summary">
+    Explain today's lesson out loud — then write your three-sentence summary.
+  </label>
+  <textarea
+    id="summary"
+    class="loop-summary"
+    rows="4"
+    placeholder="Today I learned that…"
+    spellcheck="true"></textarea>
+
+  <div class="loop-foot">
+    <p class="loop-count" aria-live="polite">
+      <span class="sentences">0</span>/3 sentences
+    </p>
+    <button type="button" class="loop-complete" disabled>
+      <svg
+        class="icon icon-check"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        aria-hidden="true"
+      >
+        <path d="M20 6 9 17l-5-5"></path>
+      </svg>
+      <span class="label">Mark as complete</span>
+    </button>
+  </div>
+</section>
+
+<style>
+  .loop {
+    margin-top: var(--space-2xl);
+    padding: var(--space-l);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+  }
+
+  .loop-label {
+    display: block;
+    margin-top: var(--space-s);
+    font-weight: 600;
+  }
+
+  .loop-summary {
+    width: 100%;
+    margin-top: var(--space-2xs);
+    padding: var(--space-2xs) var(--space-s);
+    background-color: var(--color-bg);
+    color: var(--color-ink);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font: inherit;
+    line-height: 1.6;
+    resize: vertical;
+    transition:
+      border-color var(--dur-fast) var(--ease-out),
+      box-shadow var(--dur-fast) var(--ease-out);
+  }
+
+  .loop-summary:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px var(--color-accent-soft);
+  }
+
+  .loop-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-s);
+    margin-top: var(--space-s);
+  }
+
+  .loop-count {
+    color: var(--color-ink-muted);
+    font-size: var(--step--1);
+  }
+
+  /* The counter earns its color at three sentences. */
+  .loop-count.done {
+    color: var(--color-accent);
+    font-weight: 600;
+  }
+
+  .loop-complete {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    padding: 0.55em 1.1em;
+    background-color: var(--color-accent);
+    color: var(--color-bg);
+    border: 1px solid transparent;
+    border-radius: var(--radius-md);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+      background-color var(--dur-fast) var(--ease-out),
+      opacity var(--dur-fast) var(--ease-out),
+      transform var(--dur-fast) var(--ease-out);
+  }
+
+  .loop-complete:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  .loop-complete:not(:disabled):hover {
+    background-color: var(--color-accent-strong);
+    transform: translateY(-1px);
+  }
+
+  @media (max-width: 480px) {
+    .loop {
+      padding: var(--space-m);
+    }
+
+    .loop-foot {
+      flex-direction: column;
+      align-items: stretch;
+      text-align: center;
+    }
+  }
+</style>
+
+<script>
+  import {
+    getLesson,
+    markComplete,
+    markIncomplete,
+    saveSummary,
+    EVENT,
+  } from "../scripts/progress.ts";
+
+  // Sentence split: ".", "!", "?" followed by space/end. Imperfect is fine —
+  // it's a soft nudge toward the Feynman habit, not a hard gate.
+  const sentences = (text: string) =>
+    (text.trim().match(/[.!?](\s|$)/g) ?? []).length;
+
+  function bind(section: Element) {
+    if (section.hasAttribute("data-bound")) return;
+    section.setAttribute("data-bound", "");
+
+    const slug = section.getAttribute("data-slug") ?? "";
+    const textarea =
+      section.querySelector<HTMLTextAreaElement>(".loop-summary");
+    const counter = section.querySelector(".loop-count");
+    const sentenceEl = section.querySelector(".sentences");
+    const button = section.querySelector<HTMLButtonElement>(".loop-complete");
+    if (!textarea || !button || !sentenceEl || !counter) return;
+
+    // Reflect stored state on load.
+    const stored = getLesson(slug);
+    if (stored?.summary) textarea.value = stored.summary;
+    const isDone = Boolean(stored?.completedAt);
+    section.classList.toggle("is-complete", isDone);
+    button.disabled = isDone ? false : sentences(textarea.value) < 3;
+
+    const render = () => {
+      const n = sentences(textarea.value);
+      sentenceEl.textContent = String(n);
+      counter.classList.toggle("done", n >= 3);
+      if (!section.classList.contains("is-complete")) {
+        button.disabled = n < 3;
+      }
+    };
+
+    // Autosave the summary while typing (silent — no event storm).
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    textarea.addEventListener("input", () => {
+      render();
+      clearTimeout(timer);
+      timer = setTimeout(() => saveSummary(slug, textarea.value), 400);
+    });
+
+    button.addEventListener("click", () => {
+      if (section.classList.contains("is-complete")) {
+        markIncomplete(slug);
+        section.classList.remove("is-complete");
+        button.disabled = sentences(textarea.value) < 3;
+        textarea.focus();
+      } else {
+        markComplete(slug, textarea.value);
+        section.classList.add("is-complete");
+        button.disabled = false;
+      }
+    });
+
+    // Another component changed progress — re-sync this one.
+    document.addEventListener(EVENT, () => {
+      const now = Boolean(getLesson(slug)?.completedAt);
+      section.classList.toggle("is-complete", now);
+      render();
+    });
+  }
+
+  document.querySelectorAll("[data-slug].loop").forEach(bind);
+
+  // The ClientRouter swaps the body on navigation — rebind against fresh nodes.
+  document.addEventListener("astro:after-swap", () => {
+    document.querySelectorAll("[data-slug].loop").forEach(bind);
+  });
+</script>
