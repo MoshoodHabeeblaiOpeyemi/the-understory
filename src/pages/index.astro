@@ -6,14 +6,17 @@ import modules from "../data/modules.json";
 // The vault hands over every lesson it holds.
 const lessons = await getCollection("lessons");
 
+// The shape of one vault entry — only the fields this page needs.
+type Lesson = { data: { module: number } };
+
 // How many vault lessons belong to a given module?
-const written = (moduleId) =>
-  lessons.filter((lesson) => lesson.data.module === moduleId).length;
+const written = (moduleId: number) =>
+  lessons.filter((lesson: Lesson) => lesson.data.module === moduleId).length;
 
 // Total days = sum of every module's range size.
 const totalDays = modules.reduce(
   (sum, m) => sum + (m.dayEnd - m.dayStart + 1),
-  0
+  0,
 );
 ---
 
@@ -27,16 +30,19 @@ const totalDays = modules.reduce(
   </section>
 
   <div class="module-grid">
-    {modules.map((m) => (
-      <div class="module-card">
-        <span class="module-emoji">{m.emoji}</span>
-        <h2>{m.title}</h2>
-        <p class="module-tagline">{m.tagline}</p>
-        <p class="module-meta">
-          Days {m.dayStart}–{m.dayEnd} · {written(m.id)}/{m.dayEnd - m.dayStart + 1} written
-        </p>
-      </div>
-    ))}
+    {
+      modules.map((m) => (
+        <div class="module-card">
+          <span class="module-emoji">{m.emoji}</span>
+          <h2>{m.title}</h2>
+          <p class="module-tagline">{m.tagline}</p>
+          <p class="module-meta">
+            Days {m.dayStart}–{m.dayEnd} · {written(m.id)}/
+            {m.dayEnd - m.dayStart + 1} written
+          </p>
+        </div>
+      ))
+    }
   </div>
 </BaseLayout>
 
@@ -80,4 +86,3 @@ const totalDays = modules.reduce(
     font-weight: 600;
   }
 </style>
-
