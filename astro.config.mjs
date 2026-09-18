@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 // The site's canonical origin. This single line is the ONLY place the domain
 // lives: canonical tags, Open Graph URLs, JSON-LD, sitemap.xml and robots.txt
 // all derive from `site`. Buying a different domain = edit this one string.
-const SITE = 'https://the-understory.ink';
+const SITE = 'https://readunderstory.ink';
 
 // Sitemap without a dependency: after the static build, walk dist/ for
 // index.html files and emit one <url> per page. A new lesson file becomes
