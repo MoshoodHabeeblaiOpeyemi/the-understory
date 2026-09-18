@@ -30,3 +30,8 @@ dev-out.log
 dev-err.log
 preview-out.log
 preview-err.log
+
+build-out.log
+build-err.log
+dev-out.log
+dev-err.log
