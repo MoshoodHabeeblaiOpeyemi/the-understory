@@ -1,0 +1,14 @@
+/// <reference path="../.astro/types.d.ts" />
+/// <reference types="astro/client" />
+/// <reference types="vite/client" />
+
+declare module "*.md?raw" {
+  const content: string;
+  export default content;
+}
+
+declare module "*?raw" {
+  const content: string;
+  export default content;
+}
+

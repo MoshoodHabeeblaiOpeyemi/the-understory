@@ -1,0 +1,143 @@
+---
+// The two pages you get via /license and /license-content live here.
+// Each page imports its Markdown file directly and renders it as prose.
+// No special frontmatter — the slug is the page, the content is literal.
+// ──────────────────────────────────────────────────────────────────────────
+
+// License page (/license) — MIT for the engine, then the content disclaimer.
+import LicenseMarkdown from "../../LICENSE.md?raw";
+
+// Content license page (/license-content) — CC BY-SA 4.0 for lessons.
+import ContentLicenseMarkdown from "../../LICENSE-CONTENT.md?raw";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>License — The Understory</title>
+    <meta
+      name="description"
+      content="How The Understory is licensed: MIT for code, CC BY-SA 4.0 for lessons."
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <style>
+      body {
+        background: #f8f6ef;
+        color: #232821;
+        font-family: ui-serif, Georgia, "Iowan Old Style", "Palatino Linotype",
+          serif;
+        line-height: 1.7;
+        padding: 3rem 1.5rem;
+        max-width: 42rem;
+        margin: 0 auto;
+      }
+      h1 {
+        font-size: 1.5rem;
+        margin-bottom: 0.25rem;
+      }
+      .subtitle {
+        color: #5d6357;
+        margin-bottom: 2rem;
+        font-size: 0.95rem;
+      }
+      pre,
+      code {
+        font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+        font-size: 0.9em;
+        background: #fffdf7;
+        border: 1px solid #e3dfd0;
+        border-radius: 6px;
+        padding: 0.1em 0.4em;
+      }
+      code {
+        background: #fffdf7;
+        border: none;
+      }
+      pre {
+        background: #fffdf7;
+        overflow-x: auto;
+        padding: 1rem;
+        margin: 0.5rem 0;
+      }
+      a {
+        color: #2d6a4f;
+        text-decoration: underline;
+        text-decoration-color: rgba(45, 106, 79, 0.5);
+        text-underline-offset: 3px;
+      }
+      a:hover {
+        text-decoration-color: currentColor;
+      }
+      .license-link {
+        display: inline-block;
+        margin-top: 1.5rem;
+        font-weight: 600;
+      }
+      footer {
+        margin-top: 3rem;
+        padding-top: 1rem;
+        border-top: 1px solid #e3dfd0;
+        color: #5d6357;
+        font-size: 0.85rem;
+      }
+      @media (prefers-color-scheme: dark) {
+        body {
+          background: #141711;
+          color: #ece8db;
+        }
+        pre,
+        code {
+          background: #1c211a;
+          border-color: #2b3229;
+        }
+        a {
+          color: #6cbb92;
+          text-decoration-color: rgba(108, 187, 146, 0.5);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>License</h1>
+    <p class="subtitle">The Understory — how this project is shared.</p>
+
+    <section class="license-section">
+      <p class="license-heading">The engine (code, styles, config)</p>
+      <p>
+        The site's source code — Astro pages and components, the design system,
+        scripts, and configuration — is licensed under the MIT License.
+        Read the full text below, or see
+        <a href="/license">/license</a>.
+      </p>
+      <details>
+        <summary>MIT License — full text</summary>
+        <hr />
+        <pre class="license-text">{LicenseMarkdown.trim()}</pre>
+      </details>
+    </section>
+
+    <section class="license-section">
+      <p class="license-heading">The lessons and field notes (written content)</p>
+      <p>
+        All lessons and field notes are licensed under the Creative Commons
+        Attribution-ShareAlike 4.0 International (CC BY-SA 4.0). Borrow,
+        remix, translate — just give credit and share alike.
+      </p>
+      <pre class="license-text">{ContentLicenseMarkdown.trim()}</pre>
+    </section>
+
+    <footer>
+      <p>
+        For questions about the license or attribution, open an issue at
+        <a href="https://github.com/MoshoodHabeeblaiOpeyemi/the-understory">
+          github.com/MoshoodHabeeblaiOpeyemi/the-understory
+        </a>
+        or reach out via
+        <a href="https://www.linkedin.com/in/moshood-habeeblai-967b14294">
+          LinkedIn
+        </a>.
+      </p>
+    </footer>
+  </body>
+</html>

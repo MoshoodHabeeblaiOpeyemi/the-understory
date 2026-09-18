@@ -59,6 +59,33 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         <a href="/glossary">glossary</a>, or search for the thing you've
         always pretended to understand. It's yours.
       </p>
+      <h2>Who's writing this</h2>
+      <div class="about-builder">
+        <img
+          class="about-builder-photo"
+          src="/images/profile.jpg"
+          alt="Portrait of Moshood Habeeb Lai Opeyemi"
+          width="96"
+          height="96"
+          loading="lazy"
+        />
+        <div>
+          <p>
+            I'm <strong>Moshood Habeeb Lai Opeyemi</strong> — a self-taught
+            developer who built things for years before I could explain them.
+            Every time I asked <em>why</em>, the tutorial moved on. So I
+            started writing the explanations I couldn't find, and The
+            Understory is what that habit became.
+          </p>
+          <p>
+            Every lesson ships as a plain Markdown file in a public vault, and
+            I read every message. Find me on{" "}
+            <a href="https://www.linkedin.com/in/moshood-habeeblai-967b14294">LinkedIn</a>,{" "}
+            <a href="https://github.com/MoshoodHabeeblaiOpeyemi">GitHub</a>, or at{" "}
+            <a href="https://greatsage.codes">greatsage.codes</a>.
+          </p>
+        </div>
+      </div>
       <p class="signoff">
         Built slowly, in public.<br />— The Understory
       </p>
@@ -101,6 +128,38 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   .signoff {
     color: var(--color-ink-muted);
     font-style: italic;
+  }
+
+  .about-builder {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-m);
+    margin-top: var(--space-s);
+    padding: var(--space-m);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+  }
+
+  .about-builder-photo {
+    flex-shrink: 0;
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--color-accent-soft);
+  }
+
+  .about-builder p + p {
+    margin-top: var(--space-2xs);
+  }
+
+  @media (max-width: 519.98px) {
+    .about-builder {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
   }
 </style>
 

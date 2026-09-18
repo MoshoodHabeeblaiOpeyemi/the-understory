@@ -39,3 +39,7 @@ dev-err.log
 # live dev server logs
 dev-out.log
 dev-err.log
+
+# transient tooling logs
+check-out.log
+check-err.log

@@ -44,6 +44,36 @@ const totalDays = modules.reduce(
         <span>{totalDays} days</span>
         <span>{lessons.length} written so far</span>
       </p>
+
+      <div class="builder">
+        <img
+          class="builder-photo"
+          src="/images/profile.jpg"
+          alt="Portrait of Moshood Habeeb Lai Opeyemi"
+          width="88"
+          height="88"
+          loading="lazy"
+        />
+        <div class="builder-copy">
+          <p class="builder-name">Moshood Habeeb Lai Opeyemi</p>
+          <p class="builder-bio">
+            Self-taught developer. I built The Understory because I got tired
+            of following recipes without tasting the food — this is the
+            explanation I needed, written one quiet read at a time.
+          </p>
+          <ul class="builder-links">
+            <li>
+              <a href="https://www.linkedin.com/in/moshood-habeeblai-967b14294">LinkedIn</a>
+            </li>
+            <li>
+              <a href="https://github.com/MoshoodHabeeblaiOpeyemi">GitHub</a>
+            </li>
+            <li>
+              <a href="https://greatsage.codes">greatsage.codes</a>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -258,5 +288,80 @@ const totalDays = modules.reduce(
       var(--color-accent) var(--p, 0%),
       var(--color-border) var(--p, 0%)
     );
+  }
+
+  /* --- The builder ---------------------------------------------------------- */
+
+  .builder {
+    display: flex;
+    align-items: center;
+    gap: var(--space-m);
+    max-width: 40rem;
+    margin-inline: auto;
+    margin-top: var(--space-xl);
+    padding-top: var(--space-l);
+    border-top: 1px solid var(--color-border);
+    text-align: left;
+  }
+
+  .builder-photo {
+    flex-shrink: 0;
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--color-accent-soft);
+  }
+
+  .builder-name {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-size: var(--step-1);
+  }
+
+  .builder-bio {
+    margin-top: var(--space-3xs);
+    color: var(--color-ink-muted);
+    font-size: var(--step--1);
+    line-height: 1.6;
+  }
+
+  .builder-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    margin-top: var(--space-2xs);
+  }
+
+  .builder-links a {
+    display: inline-block;
+    padding: 0.2em 0.6em;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    color: var(--color-ink-muted);
+    font-size: var(--step--1);
+    text-decoration: none;
+    transition:
+      color var(--dur-fast) var(--ease-out),
+      border-color var(--dur-fast) var(--ease-out);
+  }
+
+  .builder-links a:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  @media (max-width: 519.98px) {
+    .builder {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .builder-links {
+      justify-content: center;
+    }
   }
 </style>

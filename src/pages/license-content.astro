@@ -1,0 +1,105 @@
+---
+// fallback README for the /license-content route — mirrors LICENSE-CONTENT.md
+// at the root so crawlers and readers have both representations.
+import ContentLicenseMarkdown from "../../LICENSE-CONTENT.md?raw";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Content License — The Understory</title>
+    <meta
+      name="description"
+      content="The Understory's lessons and field notes are licensed under CC BY-SA 4.0."
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <style>
+      body {
+        background: #f8f6ef;
+        color: #232821;
+        font-family: ui-serif, Georgia, "Iowan Old Style", "Palatino Linotype",
+          serif;
+        line-height: 1.7;
+        padding: 3rem 1.5rem;
+        max-width: 42rem;
+        margin: 0 auto;
+      }
+      h1 {
+        font-size: 1.5rem;
+        margin-bottom: 0.25rem;
+      }
+      .subtitle {
+        color: #5d6357;
+        margin-bottom: 2rem;
+        font-size: 0.95rem;
+      }
+      pre {
+        font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+        font-size: 0.9em;
+        background: #fffdf7;
+        border: 1px solid #e3dfd0;
+        border-radius: 6px;
+        padding: 1rem;
+        overflow-x: auto;
+        margin: 0.5rem 0;
+      }
+      a {
+        color: #2d6a4f;
+        text-decoration: underline;
+        text-decoration-color: rgba(45, 106, 79, 0.5);
+        text-underline-offset: 3px;
+      }
+      a:hover {
+        text-decoration-color: currentColor;
+      }
+      .license-link {
+        display: inline-block;
+        margin-top: 1.5rem;
+        font-weight: 600;
+      }
+      footer {
+        margin-top: 3rem;
+        padding-top: 1rem;
+        border-top: 1px solid #e3dfd0;
+        color: #5d6357;
+        font-size: 0.85rem;
+      }
+      @media (prefers-color-scheme: dark) {
+        body {
+          background: #141711;
+          color: #ece8db;
+        }
+        pre {
+          background: #1c211a;
+          border-color: #2b3229;
+        }
+        a {
+          color: #6cbb92;
+          text-decoration-color: rgba(108, 187, 146, 0.5);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Content License</h1>
+    <p class="subtitle">The Understory — how the written content is shared.</p>
+
+    <p>
+      All lessons and field notes published on this site are licensed under the
+      Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0).
+      Full text below.
+    </p>
+
+    <pre class="license-text">{ContentLicenseMarkdown.trim()}</pre>
+
+    <footer>
+      <p>
+        Go back to the
+        <a href="/license">full license page</a> for information on code
+        licensing, or see
+        <a href="/about">About</a> for the people behind this.
+      </p>
+    </footer>
+  </body>
+</html>

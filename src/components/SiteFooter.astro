@@ -8,6 +8,30 @@ const explore = [
   { href: "/field-notes", label: "Field Notes" },
   { href: "/about", label: "About" },
 ];
+
+const social = [
+  {
+    href: "https://www.linkedin.com/in/moshood-habeeblai-967b14294",
+    label: "LinkedIn",
+    accent: true,
+  },
+  {
+    href: "https://github.com/MoshoodHabeeblaiOpeyemi",
+    label: "GitHub",
+    aria: "GitHub profile",
+  },
+  {
+    href: "https://greatsage.codes",
+    label: "greatsage.codes",
+    aria: "My personal site",
+  },
+  {
+    href: "https://wa.me/2347040717939?text=Hi%2C%20I%20read%20your%20work%20on%20The%20Understory%20and%20I%27d%20like%20to%20connect%20—%20what%20you%20build%20matters,%20and%20I%20want%20to%20be%20part%20of%20it.",
+    label: "WhatsApp",
+    aria: "Send a WhatsApp message",
+  },
+];
+---
 ---
 
 <footer class="site-footer">
@@ -54,6 +78,23 @@ const explore = [
         <li>Explain it out loud.</li>
         <li>Write three sentences.</li>
       </ol>
+    </div>
+
+    <div class="footer-col footer-social">
+      <p class="footer-heading">The builder</p>
+      <p class="footer-creator">
+        Moshood Habeeb Lai Opeyemi — self-taught builder, currently teaching
+        the layer of web development tutorials skip.
+      </p>
+      <ul class="footer-social-list">
+        {
+          social.map((s) => (
+            <li class={s.accent ? "social-accent" : undefined}>
+              <a href={s.href} aria-label={s.aria}>{s.label}</a>
+            </li>
+          ))
+        }
+      </ul>
     </div>
   </div>
 
@@ -190,5 +231,60 @@ const explore = [
       grid-template-columns: 1fr;
       gap: var(--space-xl);
     }
+  }
+
+  /* --- The builder column ---------------------------------------------------- */
+
+  .footer-social {
+    grid-column: auto;
+  }
+
+  .footer-creator {
+    max-width: 32rem;
+    margin-top: var(--space-2xs);
+    color: var(--color-footer-ink-muted);
+    font-size: var(--step--1);
+    line-height: 1.5;
+  }
+
+  .footer-social-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs) var(--space-xs);
+    margin-top: var(--space-s);
+  }
+
+  .footer-social-list a {
+    padding: 0.2em 0.6em;
+    border: 1px solid var(--color-footer-border);
+    border-radius: var(--radius-sm);
+    color: var(--color-footer-ink-muted);
+    font-size: var(--step--1);
+    text-decoration: none;
+    transition:
+      color var(--dur-fast) var(--ease-out),
+      border-color var(--dur-fast) var(--ease-out),
+      background-color var(--dur-fast) var(--ease-out);
+  }
+
+  .footer-social-list a:hover {
+    border-color: var(--color-footer-accent);
+    color: var(--color-footer-accent);
+    background-color: color-mix(
+      in srgb,
+      var(--color-footer-accent) 10%,
+      transparent
+    );
+  }
+
+  /* The primary link (LinkedIn) gets the accent underline — quiet, never shouting. */
+  .social-accent > a {
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: var(--color-footer-accent);
+    text-underline-offset: 3px;
   }
 </style>
