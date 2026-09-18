@@ -63,5 +63,50 @@
     "term": "ARPANET",
     "slug": "arpanet",
     "definition": "The 1969 US defense research network built to survive a nuclear attack — the internet's ancestor, and the reason the internet has no centre."
+  },
+  {
+    "term": "Client",
+    "slug": "client",
+    "definition": "Whatever initiates a request. A browser, an app, curl, a Python script — even another server. Not a type of machine; a role in the conversation."
+  },
+  {
+    "term": "Server",
+    "slug": "server",
+    "definition": "Whatever listens for requests and answers them. Not a special machine — any computer told to sit and wait. Your laptop becomes one when you run a dev server."
+  },
+  {
+    "term": "Client-server model",
+    "slug": "client-server-model",
+    "definition": "The web's fundamental relationship: one side always asks (client), one side always answers (server). Asymmetric by design — the server never initiates."
+  },
+  {
+    "term": "Request",
+    "slug": "request",
+    "definition": "The client's half of the conversation: 'may I have this thing?' A message asking a server for data or an action."
+  },
+  {
+    "term": "Response",
+    "slug": "response",
+    "definition": "The server's half of the conversation: the answer to a request — the data asked for, or an explanation of why it couldn't be done."
+  },
+  {
+    "term": "Localhost",
+    "slug": "localhost",
+    "definition": "'This computer, right here.' A loopback address where client and server are the same machine — the whole market stall happening inside your laptop during development."
+  },
+  {
+    "term": "Peer-to-peer",
+    "slug": "peer-to-peer",
+    "definition": "A network model with no fixed server — every machine is both client and server, talking directly. BitTorrent and blockchain work this way. The web does not."
+  },
+  {
+    "term": "Thin client",
+    "slug": "thin-client",
+    "definition": "A client that does almost no work itself — it just displays what the server sends. The early web's browser: fully-rendered HTML arrives, the browser shows it."
+  },
+  {
+    "term": "Thick client",
+    "slug": "thick-client",
+    "definition": "A client that does the heavy lifting itself — the server sends data, the client assembles the interface. Modern SPAs like Gmail and Twitter."
   }
 ]
