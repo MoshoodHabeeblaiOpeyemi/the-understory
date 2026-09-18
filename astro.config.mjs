@@ -4,7 +4,10 @@ import { readdirSync, writeFileSync } from 'node:fs';
 import { join, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const SITE = 'https://theunderstory.dev';
+// The site's canonical origin. This single line is the ONLY place the domain
+// lives: canonical tags, Open Graph URLs, JSON-LD, sitemap.xml and robots.txt
+// all derive from `site`. Buying a different domain = edit this one string.
+const SITE = 'https://the-understory.ink';
 
 // Sitemap without a dependency: after the static build, walk dist/ for
 // index.html files and emit one <url> per page. A new lesson file becomes
@@ -42,6 +45,16 @@ function understorySitemap() {
 
 export default defineConfig({
   site: SITE,
+
+  build: {
+    // Inline every stylesheet into each page's <head>. The site's entire CSS
+    // is ~26 KB (≈6 KB compressed), and inlining removes the render-blocking
+    // request — the "network dependency tree" Lighthouse flags, and the
+    // single biggest lever on FCP/LCP for a cold page load (most readers
+    // arrive on a deep lesson page, so every arrival is a cold start).
+    inlineStylesheets: 'always',
+  },
+
   integrations: [understorySitemap()],
 });
 
