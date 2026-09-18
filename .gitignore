@@ -26,3 +26,5 @@ pnpm-debug.log*
 # transient build logs
 build-out.log
 build-err.log
+dev-out.log
+dev-err.log

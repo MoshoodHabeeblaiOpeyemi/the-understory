@@ -1,0 +1,143 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+// The "lost in the understory" page. Ships as /404.html; Netlify serves it
+// for any unmatched route. The search button reuses the header trigger's
+// data attribute — the dialog is already mounted by BaseLayout.
+---
+
+<BaseLayout title="Page not found — The Understory" description="This trail doesn't exist. Search the reading room or head back to the light.">
+  <section class="lost">
+    <svg class="sprout" viewBox="0 0 32 32" aria-hidden="true">
+      <path
+        d="M16 17C8.5 17 4 13 4 5.5 11.5 5.5 16 10 16 17Z"
+        class="leaf"></path>
+      <path
+        d="M16 13C16 6 21 1.5 28 1.5 28 8.5 23 13 16 13Z"
+        class="leaf"></path>
+      <path class="stem" d="M16 30V15" stroke-width="2.6" stroke-linecap="round"></path>
+    </svg>
+
+    <p class="code" aria-hidden="true">404</p>
+    <h1>Lost in the understory.</h1>
+    <p class="lede">
+      This trail doesn't exist — maybe it was never written, or the forest
+      moved. Search the reading room, or step back into the light.
+    </p>
+
+    <div class="actions">
+      <a class="btn btn-primary" href="/">Back to the light</a>
+      <button type="button" class="btn btn-ghost" data-search-open>
+        Search the room
+        <kbd>Ctrl K</kbd>
+      </button>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .lost {
+    min-height: 60vh;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    text-align: center;
+    padding: var(--space-2xl) var(--space-m);
+  }
+
+  .sprout {
+    width: 3.5rem;
+    height: 3.5rem;
+  }
+
+  .leaf {
+    fill: var(--color-accent);
+  }
+
+  .stem {
+    stroke: var(--color-accent);
+  }
+
+  .code {
+    margin-top: var(--space-s);
+    color: var(--color-ink-muted);
+    font-family: var(--font-mono);
+    font-size: var(--step-1);
+    letter-spacing: 0.3em;
+  }
+
+  .lost h1 {
+    margin-top: var(--space-3xs);
+    font-size: var(--step-4);
+  }
+
+  .lede {
+    max-width: 34rem;
+    margin-top: var(--space-s);
+    color: var(--color-ink-muted);
+    line-height: 1.6;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-s);
+    margin-top: var(--space-l);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    padding: 0.65em 1.35em;
+    border-radius: var(--radius-md);
+    font-size: var(--step-0);
+    font-weight: 600;
+    text-decoration: none;
+    border: 1px solid transparent;
+    transition:
+      transform var(--dur-fast) var(--ease-out),
+      background-color var(--dur-fast) var(--ease-out),
+      border-color var(--dur-fast) var(--ease-out),
+      color var(--dur-fast) var(--ease-out);
+  }
+
+  .btn:hover {
+    transform: translateY(-1px);
+  }
+
+  .btn-primary {
+    background-color: var(--color-accent);
+    color: var(--color-bg);
+  }
+
+  .btn-primary:hover {
+    background-color: var(--color-accent-strong);
+  }
+
+  .btn-ghost {
+    border-color: var(--color-border);
+    color: var(--color-ink);
+    background: none;
+    font: inherit;
+    font-size: var(--step-0);
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .btn-ghost:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+    background-color: var(--color-accent-softer);
+  }
+
+  .btn kbd {
+    padding: 0.1em 0.5em;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background-color: var(--color-bg);
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+  }
+</style>

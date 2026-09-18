@@ -8,16 +8,37 @@ import Footer from "../components/SiteFooter.astro";
 import SearchDialog from "../components/SearchDialog.astro";
 
 // Every page declares its own title + description; defaults keep stray
-// pages presentable. (OG tags, canonical, JSON-LD land in Phase 5.)
+// pages presentable. `ld` carries page-specific JSON-LD (e.g. the Article
+// schema lessons pass) — emitted as one combined graph in <head>.
 interface Props {
   title?: string;
   description?: string;
+  image?: string;
+  ld?: object;
 }
 
 const {
   title = "The Understory — the layer beneath the code",
   description = "A 193-day reading room for self-taught developers: the vocabulary, history, and mental models the tutorials skipped.",
+  image = "/images/og-default.png",
+  ld,
 } = Astro.props;
+
+// Canonical + social URLs derive from the configured site origin —
+// never hardcoded, so the domain can move with one config line.
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = new URL(image, Astro.site).href;
+
+// Site-level schema: who we are, where search lives. Page-specific schema
+// (Article) arrives via the `ld` prop and is emitted alongside it.
+const siteLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "The Understory",
+  url: Astro.site?.href,
+  description,
+};
+const graph = ld ? [siteLd, ld] : [siteLd];
 ---
 
 <!doctype html>
@@ -27,6 +48,27 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <!-- Open Graph — how link previews render everywhere links are shared. -->
+    <meta property="og:type" content={ld ? "article" : "website"} />
+    <meta property="og:site_name" content="The Understory" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="The Understory — the layer beneath the code" />
+
+    <!-- Twitter/X card. -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <!-- Structured data: site identity + page schema (Article on lessons). -->
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(graph)} />
 
     <!-- Theme BEFORE first paint: the stored choice wins, otherwise the OS
          preference. Inline because bundled scripts are deferred and would
@@ -54,6 +96,11 @@ const {
     </script>
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- Touch/PWA layer: saving to a phone home screen should look
+         deliberate — same mark, full-bleed tile, brand-tinted chrome. -->
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="apple-mobile-web-app-title" content="Understory" />
     <meta
       name="theme-color"
       media="(prefers-color-scheme: light)"

@@ -42,9 +42,39 @@ const blurb = (lesson.body ?? "")
   .replace(/\s+/g, " ")
   .trim()
   .slice(0, 155);
+
+// Social + schema description prefers the authored summary, falls back to
+// the body-derived teaser when frontmatter hasn't got one yet.
+const description = lesson.data.summary ?? blurb;
+
+// Phase 5 structured data: the Article Google reads, derived entirely at
+// build time. timeRequired is honest (computed from the body), and the
+// keywords union gives tags + introduced terms a second life in search.
+const ld = {
+  "@type": "Article",
+  headline: lesson.data.title,
+  description,
+  inLanguage: "en",
+  url: new URL(Astro.url.pathname, Astro.site).href,
+  mainEntityOfPage: {
+    "@type": "WebPage",
+    "@id": new URL(Astro.url.pathname, Astro.site).href,
+  },
+  image: new URL("/images/og-default.png", Astro.site).href,
+  articleSection: moduleMeta?.title,
+  timeRequired: `PT${minutes}M`,
+  keywords: [...lesson.data.tags, ...lesson.data.glossary].join(", "),
+  author: { "@type": "Organization", name: "The Understory" },
+  publisher: { "@type": "Organization", name: "The Understory" },
+  isPartOf: {
+    "@type": "CreativeWorkSeries",
+    name: "The Understory",
+    url: Astro.site?.href,
+  },
+};
 ---
 
-<BaseLayout title={`${lesson.data.title} — The Understory`} description={blurb}>
+<BaseLayout title={`${lesson.data.title} — The Understory`} description={description} ld={ld}>
   <article class="lesson">
     <header class="lesson-header">
       <nav class="crumbs" aria-label="Breadcrumb">
@@ -139,8 +169,9 @@ const blurb = (lesson.body ?? "")
     margin-inline: auto;
     padding-block: var(--space-xl) 0;
     /* Mobile reading fix: gutters on small screens, where the container
-       max-width isn't the binding constraint. */
-    padding-inline: var(--space-s);
+       max-width isn't the binding constraint. --space-m (1.5rem) is the
+       minimum comfy measure for a phone; the thumb is nowhere near the text. */
+    padding-inline: var(--space-m);
   }
 
   @media (min-width: 480px) {
