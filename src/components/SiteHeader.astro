@@ -173,7 +173,7 @@ const isCurrent = (href: string) =>
     }
 
     // --- Mobile menu ----------------------------------------------------------
-    const navToggle = document.querySelector(".nav-toggle");
+    const navToggle = document.querySelector<HTMLElement>(".nav-toggle");
     const siteNav = document.getElementById("site-nav");
     if (!navToggle || !siteNav || navToggle.dataset.bound) return;
     navToggle.dataset.bound = "1";
@@ -204,7 +204,7 @@ const isCurrent = (href: string) =>
     const siteNav = document.getElementById("site-nav");
     if (!siteNav?.classList.contains("is-open")) return;
     siteNav.classList.remove("is-open");
-    const navToggle = document.querySelector(".nav-toggle");
+    const navToggle = document.querySelector<HTMLElement>(".nav-toggle");
     navToggle?.setAttribute("aria-expanded", "false");
     navToggle?.focus();
   });

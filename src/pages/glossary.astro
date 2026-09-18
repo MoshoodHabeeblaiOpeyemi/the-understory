@@ -315,7 +315,7 @@ const dayUrl = (day: number) => `/lessons/${String(day).padStart(3, "0")}`;
   // this only shows/hides — no runtime fetching, ever.
   const filter = document.getElementById("gloss-filter") as HTMLInputElement | null;
   const terms = Array.from(document.querySelectorAll<HTMLElement>(".term"));
-  const noResults = document.querySelector(".no-results");
+  const noResults = document.querySelector<HTMLElement>(".no-results");
   const letterLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>(".alpha a"));
 
   function applyFilter() {
@@ -335,7 +335,7 @@ const dayUrl = (day: number) => `/lessons/${String(day).padStart(3, "0")}`;
   // Letter tabs: scroll to the first term of that letter.
   letterLinks.forEach((link) => {
     link.addEventListener("click", (event) => {
-      const letter = link.dataset.letter;
+      const letter = link.dataset.letter ?? "";
       if (letter === "all") return; // "All" just clears state via href="#all"
       const target = terms.find(
         (t) => !t.hidden && t.dataset.term?.startsWith(letter.toLowerCase() ?? ""),
