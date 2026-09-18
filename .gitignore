@@ -35,3 +35,7 @@ build-out.log
 build-err.log
 dev-out.log
 dev-err.log
+
+# live dev server logs
+dev-out.log
+dev-err.log
