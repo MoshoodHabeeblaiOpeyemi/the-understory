@@ -16,9 +16,14 @@ function understorySitemap() {
   return {
     name: 'understory-sitemap',
     hooks: {
+      /** @param {{ dir: URL }} payload */
       'astro:build:done': async ({ dir }) => {
         const outDir = fileURLToPath(dir);
+        /** @type {string[]} */
         const urls = [];
+        /**
+         * @param {string} path
+         */
         const walk = (path) => {
           for (const entry of readdirSync(path, { withFileTypes: true })) {
             const full = join(path, entry.name);
@@ -57,4 +62,3 @@ export default defineConfig({
 
   integrations: [understorySitemap()],
 });
-
