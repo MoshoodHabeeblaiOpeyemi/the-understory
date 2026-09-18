@@ -142,7 +142,11 @@ const ld = {
     <nav class="thumb-nav" aria-label="Lesson navigation (quick)">
       {
         prev ? (
-          <a class="thumb-prev" href={`/lessons/${String(prev.data.day).padStart(3, "0")}`}>
+          <a
+            class="thumb-prev"
+            href={`/lessons/${String(prev.data.day).padStart(3, "0")}`}
+            aria-label={`Previous lesson: Day ${prev.data.day} — ${prev.data.title}`}
+          >
             <span aria-hidden="true">←</span> Previous
           </a>
         ) : (
@@ -151,7 +155,11 @@ const ld = {
       }
       {
         next ? (
-          <a class="thumb-next" href={`/lessons/${String(next.data.day).padStart(3, "0")}`}>
+          <a
+            class="thumb-next"
+            href={`/lessons/${String(next.data.day).padStart(3, "0")}`}
+            aria-label={`Next lesson: Day ${next.data.day} — ${next.data.title}`}
+          >
             Next <span aria-hidden="true">→</span>
           </a>
         ) : (

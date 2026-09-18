@@ -75,8 +75,18 @@ const dayUrl = (day: number) => `/lessons/${String(day).padStart(3, "0")}`;
         />
       </div>
       <nav class="alpha" aria-label="Jump to letter">
-        <a href="#all" data-letter="all" class="is-active">All</a>
-        {letters.map((l) => <a href={`#letter-${l}`} data-letter={l}>{l}</a>)}
+        <a href="#all" data-letter="all" class="is-active" aria-label="Show all terms">All</a>
+        {
+          letters.map((l) => (
+            <a
+              href={`#letter-${l}`}
+              data-letter={l}
+              aria-label={`Jump to terms starting with ${l}`}
+            >
+              {l}
+            </a>
+          ))
+        }
       </nav>
     </div>
 
@@ -98,7 +108,9 @@ const dayUrl = (day: number) => `/lessons/${String(day).padStart(3, "0")}`;
                 {entry.days.map((day, j) => (
                   <>
                     {j > 0 && ", "}
-                    <a href={dayUrl(day)}>Day {day}</a>
+                    <a href={dayUrl(day)} aria-label={`Read the Day ${day} lesson`}>
+                      Day {day}
+                    </a>
                   </>
                 ))}
               </p>
@@ -107,7 +119,10 @@ const dayUrl = (day: number) => `/lessons/${String(day).padStart(3, "0")}`;
         ))
       }
       <li class="no-results" hidden>
-        <p>No term matches that. Try fewer letters, or start at <a href="#all">All</a>.</p>
+        <p>
+          No term matches that. Try fewer letters, or{" "}
+          <a href="#all" aria-label="Show all terms">start at All</a>.
+        </p>
       </li>
     </ol>
   </div>

@@ -92,8 +92,10 @@ a {
   margin-inline: auto;
 }
 
-/* Small-caps section label (e.g. "THE CURRICULUM"). */
+/* Small-caps section label (e.g. "THE CURRICULUM") — sans, not serif,
+   even when it is an <h2> for heading-order reasons. */
 .section-label {
+  font-family: var(--font-sans);
   font-size: var(--step--1);
   font-weight: 600;
   letter-spacing: 0.08em;
