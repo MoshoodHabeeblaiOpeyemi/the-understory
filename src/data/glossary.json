@@ -8,5 +8,60 @@
     "term": "Terminal",
     "slug": "terminal",
     "definition": "The window where you type commands. Once a physical device, now an app that pretends to be one — the shell lives inside it."
+  },
+  {
+    "term": "Internet",
+    "slug": "internet",
+    "definition": "The physical global network — undersea cables, routers, data centres — that carries data between computers. The road. The web is just one vehicle that uses it."
+  },
+  {
+    "term": "Web",
+    "slug": "web",
+    "definition": "Short for World Wide Web — the system of hyperlinked pages, URLs, and HTTP that runs on top of the internet. Invented by Tim Berners-Lee at CERN in 1989, given away for free."
+  },
+  {
+    "term": "Packet",
+    "slug": "packet",
+    "definition": "A small chunk of data — a few hundred to about 1,500 bytes — sent independently with an address header and reassembled on arrival. Nothing on the internet travels as one piece."
+  },
+  {
+    "term": "IP address",
+    "slug": "ip-address",
+    "definition": "A unique number identifying a device on the network, like a house address for packets. Your public IP changes; private IPs live inside your home network."
+  },
+  {
+    "term": "IPv4",
+    "slug": "ipv4",
+    "definition": "The original addressing system — four numbers from 0 to 255, separated by dots. About 4.3 billion addresses; the pool ran dry in 2011."
+  },
+  {
+    "term": "IPv6",
+    "slug": "ipv6",
+    "definition": "The modern addressing system — long hexadecimal addresses with room for so many devices that every grain of sand on Earth could have one."
+  },
+  {
+    "term": "TCP",
+    "slug": "tcp",
+    "definition": "The protocol that guarantees delivery: confirms the connection, acknowledges every packet, re-sends lost ones, and reorders arrivals. IP's responsible older sibling."
+  },
+  {
+    "term": "UDP",
+    "slug": "udp",
+    "definition": "A fast protocol that makes zero promises — no handshake, no re-sending. Used where speed beats perfection: video calls, games, live streams."
+  },
+  {
+    "term": "Router",
+    "slug": "router",
+    "definition": "The device that directs packets between networks — the traffic cop of the internet. In your home, it also translates public and private IP addresses (NAT)."
+  },
+  {
+    "term": "NAT",
+    "slug": "nat",
+    "definition": "Network Address Translation — the trick that lets one public IP address serve every device on your home network by translating between outside and inside addresses."
+  },
+  {
+    "term": "ARPANET",
+    "slug": "arpanet",
+    "definition": "The 1969 US defense research network built to survive a nuclear attack — the internet's ancestor, and the reason the internet has no centre."
   }
 ]

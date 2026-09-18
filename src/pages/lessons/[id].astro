@@ -7,7 +7,7 @@ import modules from "../../data/modules.json";
 // THE PRESS, PART 2 — one page per lesson in the vault.
 // params.id is the zero-padded day: "day-001" → "001"
 export async function getStaticPaths() {
-  const lessons = await getCollection("lessons");
+  const lessons = await getCollection("lessons", ({ data }) => !data.draft);
   return lessons.map((lesson) => ({
     params: { id: String(lesson.data.day).padStart(3, "0") },
     props: { lesson },
@@ -22,7 +22,8 @@ const { lesson } = Astro.props;
 const { Content } = await render(lesson);
 
 // The full ordered lineup of the vault — for prev/next walking.
-const all = (await getCollection("lessons")).sort(
+// Drafts are skipped so the chain jumps over unpublished days.
+const all = (await getCollection("lessons", ({ data }) => !data.draft)).sort(
   (a, b) => a.data.day - b.data.day,
 );
 const i = all.findIndex((l) => l.data.day === lesson.data.day);

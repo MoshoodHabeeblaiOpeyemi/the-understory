@@ -4,8 +4,8 @@ import ReaderProgress from "../components/ReaderProgress.astro";
 import { getCollection } from "astro:content";
 import modules from "../data/modules.json";
 
-// The vault hands over every lesson it holds.
-const lessons = await getCollection("lessons");
+// The vault hands over every published lesson — drafts stay in the drawer.
+const lessons = await getCollection("lessons", ({ data }) => !data.draft);
 
 // The shape of one vault entry — only the fields this page needs.
 type Lesson = { data: { module: number } };
