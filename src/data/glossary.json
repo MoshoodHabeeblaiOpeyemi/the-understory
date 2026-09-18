@@ -108,5 +108,76 @@
     "term": "Thick client",
     "slug": "thick-client",
     "definition": "A client that does the heavy lifting itself — the server sends data, the client assembles the interface. Modern SPAs like Gmail and Twitter."
+  },
+  {
+    "term": "HTTP",
+    "slug": "http",
+    "definition": "HyperText Transfer Protocol — the text-based rules for how clients and servers speak: a method, a path, headers, sometimes a body. Not a program you install; a language you agree to speak."
+  },
+  {
+    "term": "HTTPS",
+    "slug": "https",
+    "definition": "HTTP wrapped in TLS encryption — same messages, same format, unreadable to anyone listening in the middle. The S stands for Secure; the padlock is its promise."
+  },
+  {
+    "term": "Method",
+    "slug": "method",
+    "definition": "The verb that opens every HTTP request — GET, POST, PUT, DELETE — declaring what kind of action you want before the server reads anything else."
+  },
+  {
+    "term": "Status code",
+    "slug": "status-code",
+    "definition": "The three-digit number every HTTP response starts with — 200, 404, 500 — summarising how the request went. Programs read the number; the words after it are just for humans."
+  },
+  {
+    "term": "Header",
+    "slug": "header",
+    "definition": "A key: value line carrying context about an HTTP message — who's asking, what format they accept, how long to cache, which site they mean. Metadata, not payload."
+  },
+  {
+    "term": "Body",
+    "slug": "body",
+    "definition": "The payload of an HTTP message — the HTML, JSON, or bytes actually being transferred. Optional in requests, almost always present in responses."
+  },
+  {
+    "term": "URL",
+    "slug": "url",
+    "definition": "Uniform Resource Locator — the address of a resource on the web. What you type into the address bar; what the path in a request names."
+  },
+  {
+    "term": "TLS",
+    "slug": "tls",
+    "definition": "Transport Layer Security — the encryption protocol under HTTPS. Fixed SSL's flaws in 1999 and has been the real protocol ever since, even though everyone still says SSL."
+  },
+  {
+    "term": "SSL",
+    "slug": "ssl",
+    "definition": "Secure Sockets Layer — Netscape's 1990s encryption protocol, retired for its vulnerabilities. The name outlived the technology: say TLS if you want to be precise."
+  },
+  {
+    "term": "Certificate",
+    "slug": "certificate",
+    "definition": "A server's digital ID card, checked by your browser during the TLS handshake — proof that this server is really the domain it claims, not an impersonator."
+  },
+  {
+    "term": "Character encoding",
+    "slug": "character-encoding",
+    "definition": "The convention mapping numbers to characters — which byte means which letter. Every text file has one, declared or not; get it wrong and the bytes misread as garbage."
+  },
+  {
+    "term": "UTF-8",
+    "slug": "utf-8",
+    "definition": "The web's universal character encoding — variable-length, covering every human language plus emoji. Plain English costs one byte per letter; everything else costs more."
+  },
+  {
+    "term": "Charset",
+    "slug": "charset",
+    "definition": "The declared character encoding of a document — the charset=utf-8 half of a Content-Type header. One small string deciding whether a page reads beautifully or renders as mojibake."
+  },
+  {
+    "term": "Mojibake",
+    "slug": "mojibake",
+    "definition": "Garbage text produced by reading bytes with the wrong encoding — Ã© instead of é. From the Japanese 文字化け, 'character transformation.' Not corruption; just the wrong key."
   }
 ]
+
