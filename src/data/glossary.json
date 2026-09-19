@@ -12,216 +12,271 @@
   {
     "term": "Internet",
     "slug": "internet",
-    "definition": "The physical global network — undersea cables, routers, data centres — that carries data between computers. The road. The web is just one vehicle that uses it."
+    "definition": "The global system of interconnected computer networks, together with the physical links between them, that carries data between devices."
   },
   {
     "term": "Web",
     "slug": "web",
-    "definition": "Short for World Wide Web — the system of hyperlinked pages, URLs, and HTTP that runs on top of the internet. Invented by Tim Berners-Lee at CERN in 1989, given away for free."
+    "definition": "Short for World Wide Web: a system of interlinked hypertext documents and other resources, addressed by URLs and transferred over HTTP, that runs as a service on top of the internet."
   },
   {
     "term": "Packet",
     "slug": "packet",
-    "definition": "A small chunk of data — a few hundred to about 1,500 bytes — sent independently with an address header and reassembled on arrival. Nothing on the internet travels as one piece."
+    "definition": "A small, independently addressed unit of data — typically a few hundred to about 1,500 bytes — carrying a slice of a message plus a header describing where it came from, where it is going, and how to reassemble it."
   },
   {
     "term": "IP address",
     "slug": "ip-address",
-    "definition": "A unique number identifying a device on the network, like a house address for packets. Your public IP changes; private IPs live inside your home network."
+    "definition": "A numerical address assigned to a device on a network so that packets can be routed to it."
   },
   {
     "term": "IPv4",
     "slug": "ipv4",
-    "definition": "The original addressing system — four numbers from 0 to 255, separated by dots. About 4.3 billion addresses; the pool ran dry in 2011."
+    "definition": "The first widely deployed version of the Internet Protocol: 32-bit addresses written as four decimal numbers between 0 and 255, giving about 4.3 billion possible addresses — a pool that ran out in 2011."
   },
   {
     "term": "IPv6",
     "slug": "ipv6",
-    "definition": "The modern addressing system — long hexadecimal addresses with room for so many devices that every grain of sand on Earth could have one."
+    "definition": "The current version of the Internet Protocol: 128-bit addresses written in hexadecimal, providing an address supply large enough that exhaustion is no longer a practical concern."
   },
   {
     "term": "TCP",
     "slug": "tcp",
-    "definition": "The protocol that guarantees delivery: confirms the connection, acknowledges every packet, re-sends lost ones, and reorders arrivals. IP's responsible older sibling."
+    "definition": "Transmission Control Protocol: a transport protocol that provides reliable, ordered delivery of a stream of bytes over a connection, by acknowledging received packets, re-sending lost ones, and putting out-of-order arrivals back in sequence."
   },
   {
     "term": "UDP",
     "slug": "udp",
-    "definition": "A fast protocol that makes zero promises — no handshake, no re-sending. Used where speed beats perfection: video calls, games, live streams."
+    "definition": "User Datagram Protocol: a transport protocol that sends datagrams with no handshake, no acknowledgement, and no re-sending, trading reliability for speed."
   },
   {
     "term": "Router",
     "slug": "router",
-    "definition": "The device that directs packets between networks — the traffic cop of the internet. In your home, it also translates public and private IP addresses (NAT)."
+    "definition": "A device that forwards packets between networks, choosing the path each one takes toward its destination."
   },
   {
     "term": "NAT",
     "slug": "nat",
-    "definition": "Network Address Translation — the trick that lets one public IP address serve every device on your home network by translating between outside and inside addresses."
+    "definition": "Network Address Translation: the technique of rewriting the source or destination address in packets as they pass through, letting many private devices share a single public IP address."
   },
   {
     "term": "ARPANET",
     "slug": "arpanet",
-    "definition": "The 1969 US defense research network built to survive a nuclear attack — the internet's ancestor, and the reason the internet has no centre."
+    "definition": "The packet-switching research network funded by the US Department of Defense's Advanced Research Projects Agency and switched on in 1969 — the direct ancestor of the internet."
   },
   {
     "term": "Client",
     "slug": "client",
-    "definition": "Whatever initiates a request. A browser, an app, curl, a Python script — even another server. Not a type of machine; a role in the conversation."
+    "definition": "Any program or device that initiates a request and receives the response."
   },
   {
     "term": "Server",
     "slug": "server",
-    "definition": "Whatever listens for requests and answers them. Not a special machine — any computer told to sit and wait. Your laptop becomes one when you run a dev server."
+    "definition": "Any program or device that listens for requests and responds to them."
   },
   {
     "term": "Client-server model",
     "slug": "client-server-model",
-    "definition": "The web's fundamental relationship: one side always asks (client), one side always answers (server). Asymmetric by design — the server never initiates."
+    "definition": "An arrangement in which one party, the client, always initiates requests and the other, the server, always waits for and answers them. The relationship is asymmetric: only one side starts the conversation."
   },
   {
     "term": "Request",
     "slug": "request",
-    "definition": "The client's half of the conversation: 'may I have this thing?' A message asking a server for data or an action."
+    "definition": "A message sent by a client asking a server to perform an action or return a resource, containing a method, a target, headers, and optionally a body."
   },
   {
     "term": "Response",
     "slug": "response",
-    "definition": "The server's half of the conversation: the answer to a request — the data asked for, or an explanation of why it couldn't be done."
+    "definition": "A message sent by a server in reply to a request, containing a status code, headers, and usually a body."
   },
   {
     "term": "Localhost",
     "slug": "localhost",
-    "definition": "'This computer, right here.' A loopback address where client and server are the same machine — the whole market stall happening inside your laptop during development."
+    "definition": "The hostname that always refers to the machine the program is running on, reached over an internal loopback interface that never touches a network."
   },
   {
     "term": "Peer-to-peer",
     "slug": "peer-to-peer",
-    "definition": "A network model with no fixed server — every machine is both client and server, talking directly. BitTorrent and blockchain work this way. The web does not."
+    "definition": "A network model in which every participant acts as both client and server, exchanging resources directly with peers and depending on no central server."
   },
   {
     "term": "Thin client",
     "slug": "thin-client",
-    "definition": "A client that does almost no work itself — it just displays what the server sends. The early web's browser: fully-rendered HTML arrives, the browser shows it."
+    "definition": "A client that performs little computation itself, relying on the server to do the work and return a largely finished result."
   },
   {
     "term": "Thick client",
     "slug": "thick-client",
-    "definition": "A client that does the heavy lifting itself — the server sends data, the client assembles the interface. Modern SPAs like Gmail and Twitter."
+    "definition": "A client that performs most of the application's work itself, receiving data from the server and assembling the interface on its own."
   },
   {
     "term": "HTTP",
     "slug": "http",
-    "definition": "HyperText Transfer Protocol — the text-based rules for how clients and servers speak: a method, a path, headers, sometimes a body. Not a program you install; a language you agree to speak."
+    "definition": "HyperText Transfer Protocol: the application-layer protocol that defines how clients and servers exchange messages on the web, including the shape of a request, the shape of a response, and the meaning of the methods and status codes inside them."
   },
   {
     "term": "HTTPS",
     "slug": "https",
-    "definition": "HTTP wrapped in TLS encryption — same messages, same format, unreadable to anyone listening in the middle. The S stands for Secure; the padlock is its promise."
+    "definition": "HTTP transmitted over a TLS-encrypted connection. The message format is unchanged; the entire conversation is confidential and tamper-resistant."
   },
   {
-    "term": "Method",
-    "slug": "method",
-    "definition": "The verb that opens every HTTP request — GET, POST, PUT, DELETE — declaring what kind of action you want before the server reads anything else."
+    "term": "HTTP method",
+    "slug": "http-method",
+    "definition": "A token in the request line of an HTTP request that indicates the desired action to be performed on the target resource. The standard methods are GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS, TRACE, and CONNECT."
   },
   {
     "term": "Status code",
     "slug": "status-code",
-    "definition": "The three-digit number every HTTP response starts with — 200, 404, 500 — summarising how the request went. Programs read the number; the words after it are just for humans."
+    "definition": "A three-digit integer in the response status line that summarises the outcome of the request, grouped into five classes: 1xx informational, 2xx success, 3xx redirection, 4xx client error, and 5xx server error."
   },
   {
     "term": "Header",
     "slug": "header",
-    "definition": "A key: value line carrying context about an HTTP message — who's asking, what format they accept, how long to cache, which site they mean. Metadata, not payload."
+    "definition": "A key: value line in an HTTP message carrying metadata about the message or the entity it describes — who is asking, what formats are acceptable, how the body is encoded, or how long the response may be cached."
   },
   {
     "term": "Body",
     "slug": "body",
-    "definition": "The payload of an HTTP message — the HTML, JSON, or bytes actually being transferred. Optional in requests, almost always present in responses."
+    "definition": "The payload of an HTTP message: the bytes actually being transferred, whose type and size are declared by the Content-Type and Content-Length headers. Optional in a request, usual in a response."
   },
   {
     "term": "URL",
     "slug": "url",
-    "definition": "Uniform Resource Locator — the address of a resource on the web. What you type into the address bar; what the path in a request names."
+    "definition": "Uniform Resource Locator: a string that identifies a resource on the web and names the scheme by which to retrieve it, composed of a protocol, a domain, a path, an optional query string, and an optional fragment."
   },
   {
     "term": "TLS",
     "slug": "tls",
-    "definition": "Transport Layer Security — the encryption protocol under HTTPS. Fixed SSL's flaws in 1999 and has been the real protocol ever since, even though everyone still says SSL."
+    "definition": "Transport Layer Security: the cryptographic protocol that provides confidentiality, integrity, and server authentication for a connection. The successor to SSL, standardised in 1999 as TLS 1.0, now at TLS 1.3."
   },
   {
     "term": "SSL",
     "slug": "ssl",
-    "definition": "Secure Sockets Layer — Netscape's 1990s encryption protocol, retired for its vulnerabilities. The name outlived the technology: say TLS if you want to be precise."
+    "definition": "Secure Sockets Layer: the encryption protocol Netscape developed in the 1990s and the direct ancestor of TLS. Deprecated because of vulnerabilities, but its name survives in everyday speech."
   },
   {
     "term": "Certificate",
     "slug": "certificate",
-    "definition": "A server's digital ID card, checked by your browser during the TLS handshake — proof that this server is really the domain it claims, not an impersonator."
+    "definition": "A digitally signed document, issued by a certificate authority, that binds a public key to a domain name. A client validates it during the TLS handshake to confirm it is talking to the server it intended to reach."
   },
   {
     "term": "Character encoding",
     "slug": "character-encoding",
-    "definition": "The convention mapping numbers to characters — which byte means which letter. Every text file has one, declared or not; get it wrong and the bytes misread as garbage."
+    "definition": "A defined mapping between numbers and characters, specifying which byte sequence represents which character in a text."
   },
   {
     "term": "UTF-8",
     "slug": "utf-8",
-    "definition": "The web's universal character encoding — variable-length, covering every human language plus emoji. Plain English costs one byte per letter; everything else costs more."
+    "definition": "A variable-length character encoding that can represent every character in Unicode. Each character occupies one to four bytes: ASCII characters take one byte, most other scripts take two or three, and emoji take four."
   },
   {
     "term": "Charset",
     "slug": "charset",
-    "definition": "The declared character encoding of a document — the charset=utf-8 half of a Content-Type header. One small string deciding whether a page reads beautifully or renders as mojibake."
+    "definition": "The declared character encoding of a document's bytes, named in the charset parameter of a Content-Type header."
   },
   {
     "term": "Mojibake",
     "slug": "mojibake",
-    "definition": "Garbage text produced by reading bytes with the wrong encoding — Ã© instead of é. From the Japanese 文字化け, 'character transformation.' Not corruption; just the wrong key."
+    "definition": "Text corruption caused by decoding a byte sequence with the wrong character encoding, so each byte is mapped to a character other than the one intended."
   },
   {
     "term": "request-response cycle",
     "slug": "request-response-cycle",
-    "definition": "The four-step rhythm of every conversation on the web: the client asks, the server processes, the server answers, the client receives. Repeat it a few billion times a second and you have the internet."
+    "definition": "The four-step pattern of every HTTP exchange: the client sends a request, the server processes it, the server returns a response, and the client receives it."
   },
   {
     "term": "DNS",
     "slug": "dns",
-    "definition": "Domain Name System — the internet's phone book. It translates human-friendly domain names into the IP addresses machines actually use, with caches at every level so repeat lookups cost almost nothing."
+    "definition": "Domain Name System: the distributed, hierarchical naming system that resolves human-readable domain names into IP addresses, with caches at every level to keep repeat lookups fast."
   },
   {
     "term": "TCP handshake",
     "slug": "tcp-handshake",
-    "definition": "The three-message ritual — SYN, SYN-ACK, ACK — that opens a TCP connection before any data flows. Every handshake costs a round trip."
+    "definition": "The three-message exchange — SYN, SYN-ACK, ACK — that establishes a TCP connection before any application data is sent."
   },
   {
     "term": "three-way handshake",
     "slug": "three-way-handshake",
-    "definition": "Another name for the TCP handshake: three messages, one agreement to talk, paid for in a single round trip."
+    "definition": "Another name for the TCP handshake: three messages, one round trip, one open connection."
   },
   {
     "term": "TLS handshake",
     "slug": "tls-handshake",
-    "definition": "The negotiation that runs after TCP connects, in which the server proves its identity with a certificate and both sides agree on encryption keys. HTTPS pays for it on every new connection."
+    "definition": "The negotiation that runs after the TCP connection is open, in which the server proves its identity with a certificate and both sides derive shared encryption keys."
   },
   {
     "term": "latency",
     "slug": "latency",
-    "definition": "The delay before data arrives, usually measured as the round-trip time between client and server. Distance, handshakes and slow processing all add to it."
+    "definition": "The delay between sending a request and receiving a response, usually dominated by round-trip time; distance, handshakes, and server processing all add to it."
   },
   {
     "term": "round trip",
     "slug": "round-trip",
-    "definition": "One full journey: a message out to the server and a reply back. Handshakes are priced in round trips, and physical distance multiplies their cost."
+    "definition": "One complete journey of a message to the server and a reply back. Handshakes are priced in round trips."
   },
   {
     "term": "cache",
     "slug": "cache",
-    "definition": "A stored copy kept close by, so a request can be answered without repeating the full journey. Browsers, operating systems, routers, DNS servers, CDNs and backends all keep caches. The fastest request is the one never made."
+    "definition": "A stored copy of a response or resource, held close to the requester so the request can be answered without repeating the full journey."
   },
   {
     "term": "TTFB",
     "slug": "ttfb",
-    "definition": "Time To First Byte — the moment the server's first byte of response arrives, marking the boundary between the connection phase and the server's thinking phase. High TTFB means the backend is the problem."
+    "definition": "Time To First Byte: the elapsed time between sending a request and receiving the first byte of the response — the boundary between the connection phase and the server's processing phase."
+  },
+  {
+    "term": "GET",
+    "slug": "get",
+    "definition": "An HTTP method that requests a representation of the specified resource. Safe and idempotent."
+  },
+  {
+    "term": "POST",
+    "slug": "post",
+    "definition": "An HTTP method that submits data to the specified resource, often causing a change in state or the creation of a new resource. Neither safe nor idempotent."
+  },
+  {
+    "term": "PUT",
+    "slug": "put",
+    "definition": "An HTTP method that replaces all current representations of the target resource with the request payload. Not safe, but idempotent."
+  },
+  {
+    "term": "PATCH",
+    "slug": "patch",
+    "definition": "An HTTP method that applies partial modifications to a resource. Not safe, and not guaranteed to be idempotent. Standardised in RFC 5789."
+  },
+  {
+    "term": "DELETE",
+    "slug": "delete",
+    "definition": "An HTTP method that deletes the target resource. Not safe, but idempotent."
+  },
+  {
+    "term": "HEAD",
+    "slug": "head",
+    "definition": "An HTTP method identical to GET except that the server must not return a message body. Safe and idempotent."
+  },
+  {
+    "term": "OPTIONS",
+    "slug": "options",
+    "definition": "An HTTP method that requests information about the communication options available for the target resource. Safe and idempotent."
+  },
+  {
+    "term": "Safe method",
+    "slug": "safe-method",
+    "definition": "An HTTP method whose defined semantics are read-only: the client does not request, and does not expect, any change to the state of the server. The safe methods are GET, HEAD, OPTIONS, and TRACE."
+  },
+  {
+    "term": "Idempotent",
+    "slug": "idempotent",
+    "definition": "A property of an HTTP method where multiple identical requests have the same intended effect on the server as a single request, so a client can safely retry after a timeout. From the Latin idem (same) + potens (power)."
+  },
+  {
+    "term": "CRUD",
+    "slug": "crud",
+    "definition": "Create, Read, Update, Delete — the four fundamental operations on persistent data, and the vocabulary every API ends up mapping onto HTTP methods."
+  },
+  {
+    "term": "REST",
+    "slug": "rest",
+    "definition": "Representational State Transfer — an architectural style for APIs, described by Roy Fielding in 2000, in which HTTP methods carry the action and URLs name resources."
   }
 ]
