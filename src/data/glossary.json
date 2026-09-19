@@ -178,6 +178,50 @@
     "term": "Mojibake",
     "slug": "mojibake",
     "definition": "Garbage text produced by reading bytes with the wrong encoding — Ã© instead of é. From the Japanese 文字化け, 'character transformation.' Not corruption; just the wrong key."
+  },
+  {
+    "term": "request-response cycle",
+    "slug": "request-response-cycle",
+    "definition": "The four-step rhythm of every conversation on the web: the client asks, the server processes, the server answers, the client receives. Repeat it a few billion times a second and you have the internet."
+  },
+  {
+    "term": "DNS",
+    "slug": "dns",
+    "definition": "Domain Name System — the internet's phone book. It translates human-friendly domain names into the IP addresses machines actually use, with caches at every level so repeat lookups cost almost nothing."
+  },
+  {
+    "term": "TCP handshake",
+    "slug": "tcp-handshake",
+    "definition": "The three-message ritual — SYN, SYN-ACK, ACK — that opens a TCP connection before any data flows. Every handshake costs a round trip."
+  },
+  {
+    "term": "three-way handshake",
+    "slug": "three-way-handshake",
+    "definition": "Another name for the TCP handshake: three messages, one agreement to talk, paid for in a single round trip."
+  },
+  {
+    "term": "TLS handshake",
+    "slug": "tls-handshake",
+    "definition": "The negotiation that runs after TCP connects, in which the server proves its identity with a certificate and both sides agree on encryption keys. HTTPS pays for it on every new connection."
+  },
+  {
+    "term": "latency",
+    "slug": "latency",
+    "definition": "The delay before data arrives, usually measured as the round-trip time between client and server. Distance, handshakes and slow processing all add to it."
+  },
+  {
+    "term": "round trip",
+    "slug": "round-trip",
+    "definition": "One full journey: a message out to the server and a reply back. Handshakes are priced in round trips, and physical distance multiplies their cost."
+  },
+  {
+    "term": "cache",
+    "slug": "cache",
+    "definition": "A stored copy kept close by, so a request can be answered without repeating the full journey. Browsers, operating systems, routers, DNS servers, CDNs and backends all keep caches. The fastest request is the one never made."
+  },
+  {
+    "term": "TTFB",
+    "slug": "ttfb",
+    "definition": "Time To First Byte — the moment the server's first byte of response arrives, marking the boundary between the connection phase and the server's thinking phase. High TTFB means the backend is the problem."
   }
 ]
-

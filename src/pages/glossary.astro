@@ -9,12 +9,25 @@ import definitions from "../data/glossary.json";
 type Def = { term: string; slug: string; definition: string };
 
 // Which lessons introduce which terms (slug → day numbers).
-const lessons = (await getCollection("lessons", ({ data }) => !data.draft))
-  .sort((a, b) => a.data.day - b.data.day);
+const lessons = (await getCollection("lessons", ({ data }) => !data.draft)).sort(
+  (a, b) => a.data.day - b.data.day,
+);
+
+// Frontmatter names a term the way a human says it ("TCP handshake", "TTFB");
+// definitions are filed by slug ("tcp-handshake", "ttfb"). Normalise both
+// sides, or the backlink never builds and the term renders twice — once
+// defined, once as a blank "not written yet" placeholder.
+const slugify = (s: string) =>
+  s
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
 
 const introducedIn = new Map<string, number[]>();
 for (const lesson of lessons) {
-  for (const slug of lesson.data.glossary ?? []) {
+  for (const name of lesson.data.glossary ?? []) {
+    const slug = slugify(name);
     introducedIn.set(slug, [...(introducedIn.get(slug) ?? []), lesson.data.day]);
   }
 }
