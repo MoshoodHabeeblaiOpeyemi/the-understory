@@ -43,3 +43,7 @@ dev-err.log
 # transient tooling logs
 check-out.log
 check-err.log
+
+# local scratch scripts and push logs
+_*
+
