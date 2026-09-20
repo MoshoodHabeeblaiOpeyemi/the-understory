@@ -125,11 +125,6 @@
     "definition": "A token in the request line of an HTTP request that indicates the desired action to be performed on the target resource. The standard methods are GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS, TRACE, and CONNECT."
   },
   {
-    "term": "Status code",
-    "slug": "status-code",
-    "definition": "A three-digit integer in the response status line that summarises the outcome of the request, grouped into five classes: 1xx informational, 2xx success, 3xx redirection, 4xx client error, and 5xx server error."
-  },
-  {
     "term": "Header",
     "slug": "header",
     "definition": "A key: value line in an HTTP message carrying metadata about the message or the entity it describes — who is asking, what formats are acceptable, how the body is encoded, or how long the response may be cached."
@@ -282,7 +277,7 @@
   {
     "term": "HTTP status code",
     "slug": "http-status-code",
-    "definition": "A three-digit integer in the status line of an HTTP response that indicates the outcome of the request, defined by the HTTP specification and maintained in a public registry by IANA."
+    "definition": "A three-digit integer in the status line of an HTTP response that indicates the outcome of the request. Defined by the HTTP specification and maintained in a public registry by IANA."
   },
   {
     "term": "200 OK",
@@ -383,5 +378,85 @@
     "term": "504 Gateway Timeout",
     "slug": "504-gateway-timeout",
     "definition": "The server, acting as a gateway or proxy, did not receive a timely response from an upstream server."
+  },
+  {
+    "term": "Domain name",
+    "slug": "domain-name",
+    "definition": "A human-readable identifier for a location on the internet, structured as a hierarchy of labels separated by dots."
+  },
+  {
+    "term": "Nameserver",
+    "slug": "nameserver",
+    "definition": "A server that stores DNS records and answers queries about them."
+  },
+  {
+    "term": "Root nameserver",
+    "slug": "root-nameserver",
+    "definition": "The top-level DNS servers that direct resolvers to the appropriate TLD nameservers."
+  },
+  {
+    "term": "TLD nameserver",
+    "slug": "tld-nameserver",
+    "definition": "DNS servers responsible for a top-level domain such as .com, .org, or .ng."
+  },
+  {
+    "term": "Authoritative nameserver",
+    "slug": "authoritative-nameserver",
+    "definition": "A DNS server that holds the actual records for a domain and provides definitive answers about it. The final authority in a DNS lookup."
+  },
+  {
+    "term": "Recursive resolver",
+    "slug": "recursive-resolver",
+    "definition": "A DNS server that receives a client's query and performs the full sequence of lookups needed to return an answer, either from its cache or by querying other servers on the client's behalf."
+  },
+  {
+    "term": "DNS record",
+    "slug": "dns-record",
+    "definition": "A single entry in a DNS server that maps a name to a value. Each record has a type that defines what kind of data it holds."
+  },
+  {
+    "term": "A record",
+    "slug": "a-record",
+    "definition": "A DNS record that maps a domain name to an IPv4 address."
+  },
+  {
+    "term": "AAAA record",
+    "slug": "aaaa-record",
+    "definition": "A DNS record that maps a domain name to an IPv6 address."
+  },
+  {
+    "term": "CNAME record",
+    "slug": "cname-record",
+    "definition": "A DNS record that aliases one domain name to another."
+  },
+  {
+    "term": "MX record",
+    "slug": "mx-record",
+    "definition": "A DNS record that specifies the mail servers responsible for accepting email on behalf of a domain."
+  },
+  {
+    "term": "TXT record",
+    "slug": "txt-record",
+    "definition": "A DNS record that holds arbitrary text, commonly used for domain verification and email security policies."
+  },
+  {
+    "term": "NS record",
+    "slug": "ns-record",
+    "definition": "A DNS record that declares which nameservers are authoritative for a domain."
+  },
+  {
+    "term": "TTL",
+    "slug": "ttl",
+    "definition": "Time To Live: a value in a DNS record that specifies how many seconds the record may be cached by resolvers before they must re-query for a fresh copy."
+  },
+  {
+    "term": "DNS propagation",
+    "slug": "dns-propagation",
+    "definition": "The informal term for the period during which cached DNS answers expire and updated answers gradually reach all resolvers."
+  },
+  {
+    "term": "HOSTS.TXT",
+    "slug": "hosts-txt",
+    "definition": "The original pre-DNS hostname file: a single central text file, maintained by the Stanford Research Institute, that mapped every ARPANET hostname to its address. Its failure to scale is why DNS exists."
   }
 ]
