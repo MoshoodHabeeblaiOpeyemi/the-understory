@@ -35,7 +35,7 @@ adapt content under this license.  If you choose to attribute, the
 recommended credit line is:
 
     The Understory — readings on the layer beneath the code.
-    By Moshood Habeeb Lai Opeyemi.
+    By Moshood Habeeblai Opeyemi.
     Licensed under CC BY-SA 4.0.  https://www.readunderstory.ink
 
 For questions about the license or attribution, email the maintainer or open

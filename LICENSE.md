@@ -1,7 +1,7 @@
 The Understory
 ===============
 
-Copyright © Moshood Habeeb Lai Opeyemi.
+Copyright © Moshood Habeeblai Opeyemi.
 
 Everyone is permitted to copy and distribute verbatim copies of this license
 document, but changing it is not allowed.
@@ -15,7 +15,7 @@ convenience.
 
     The MIT License (MIT)
 
-    Copyright © Moshood Habeeb Lai Opeyemi
+    Copyright © Moshood Habeeblai Opeyemi
 
     Permission is hereby granted, free of charge, to any person obtaining a
     copy of this software and associated documentation files (the "Software"),
@@ -79,5 +79,5 @@ If you use or adapt content from this project, the preferred attribution line
 is:
 
     The Understory — readings on the layer beneath the code.
-    By Moshood Habeeb Lai Opeyemi.
+    By Moshood Habeeblai Opeyemi.
     Licensed under CC BY-SA 4.0.  https://www.readunderstory.ink

@@ -104,6 +104,7 @@
   /* ---- Structure ------------------------------------------------------------ */
 
   --measure: 68ch;      /* max line length for reading prose */
+  --measure-wide: 80ch; /* lesson reading measure on desktop (≥900px) */
   --container: 72rem;   /* page width cap */
   --header-h: 4rem;     /* sticky header height — scroll anchors offset by this */
 }

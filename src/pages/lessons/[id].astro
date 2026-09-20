@@ -189,6 +189,15 @@ const ld = {
     }
   }
 
+  /* Desktop reading measure: 68ch reads thin on large screens, so lesson
+     pages widen. Phones and tablets (<900px) keep the book measure — the
+     cap never binds there anyway, so mobile rendering is untouched. */
+  @media (min-width: 900px) {
+    .lesson {
+      max-width: var(--measure-wide);
+    }
+  }
+
   .crumbs {
     display: flex;
     flex-wrap: wrap;
