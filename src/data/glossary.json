@@ -278,5 +278,110 @@
     "term": "REST",
     "slug": "rest",
     "definition": "Representational State Transfer — an architectural style for APIs, described by Roy Fielding in 2000, in which HTTP methods carry the action and URLs name resources."
+  },
+  {
+    "term": "HTTP status code",
+    "slug": "http-status-code",
+    "definition": "A three-digit integer in the status line of an HTTP response that indicates the outcome of the request, defined by the HTTP specification and maintained in a public registry by IANA."
+  },
+  {
+    "term": "200 OK",
+    "slug": "200-ok",
+    "definition": "The standard response for a successful HTTP request; the meaning depends on the method: for GET it is the resource, for POST the result of the action."
+  },
+  {
+    "term": "201 Created",
+    "slug": "201-created",
+    "definition": "The request succeeded and a new resource was created, usually with a Location header pointing to the new resource."
+  },
+  {
+    "term": "204 No Content",
+    "slug": "204-no-content",
+    "definition": "The request succeeded, but there is no body to return."
+  },
+  {
+    "term": "301 Moved Permanently",
+    "slug": "301-moved-permanently",
+    "definition": "The target resource has been assigned a new permanent URI; clients should update their references."
+  },
+  {
+    "term": "302 Found",
+    "slug": "302-found",
+    "definition": "The target resource resides temporarily under a different URI."
+  },
+  {
+    "term": "304 Not Modified",
+    "slug": "304-not-modified",
+    "definition": "The resource has not been modified since the version the client already has, so the client should use its cached copy."
+  },
+  {
+    "term": "307 Temporary Redirect",
+    "slug": "307-temporary-redirect",
+    "definition": "Like 302, but guarantees the request method will not change on the redirected request."
+  },
+  {
+    "term": "308 Permanent Redirect",
+    "slug": "308-permanent-redirect",
+    "definition": "Like 301, but guarantees the request method will not change on the redirected request."
+  },
+  {
+    "term": "400 Bad Request",
+    "slug": "400-bad-request",
+    "definition": "The server cannot process the request due to a client error, such as malformed syntax."
+  },
+  {
+    "term": "401 Unauthorized",
+    "slug": "401-unauthorized",
+    "definition": "The client has not provided valid authentication credentials; the request lacks proven identity."
+  },
+  {
+    "term": "403 Forbidden",
+    "slug": "403-forbidden",
+    "definition": "The server understood the request but refuses to authorize it; identity may be proven but permission is denied."
+  },
+  {
+    "term": "404 Not Found",
+    "slug": "404-not-found",
+    "definition": "The server cannot find a current representation for the target resource, or is not willing to disclose that one exists."
+  },
+  {
+    "term": "405 Method Not Allowed",
+    "slug": "405-method-not-allowed",
+    "definition": "The method specified in the request-line is not allowed for the target resource."
+  },
+  {
+    "term": "409 Conflict",
+    "slug": "409-conflict",
+    "definition": "The request conflicts with the current state of the target resource."
+  },
+  {
+    "term": "422 Unprocessable Entity",
+    "slug": "422-unprocessable-entity",
+    "definition": "The request is well-formed but contains semantically invalid data."
+  },
+  {
+    "term": "429 Too Many Requests",
+    "slug": "429-too-many-requests",
+    "definition": "The client has sent too many requests in a given amount of time, typically accompanied by a Retry-After header."
+  },
+  {
+    "term": "500 Internal Server Error",
+    "slug": "500-internal-server-error",
+    "definition": "The server encountered an unexpected condition that prevented it from fulfilling the request."
+  },
+  {
+    "term": "502 Bad Gateway",
+    "slug": "502-bad-gateway",
+    "definition": "The server, acting as a gateway or proxy, received an invalid response from an upstream server."
+  },
+  {
+    "term": "503 Service Unavailable",
+    "slug": "503-service-unavailable",
+    "definition": "The server is currently unable to handle the request due to overload or maintenance."
+  },
+  {
+    "term": "504 Gateway Timeout",
+    "slug": "504-gateway-timeout",
+    "definition": "The server, acting as a gateway or proxy, did not receive a timely response from an upstream server."
   }
 ]
