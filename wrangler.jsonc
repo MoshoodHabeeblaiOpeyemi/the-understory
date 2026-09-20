@@ -1,0 +1,15 @@
+// Cloudflare Workers (new unified "Workers & Pages" build system) config.
+// The site is a fully static Astro build: `npm run build` emits plain
+// HTML/CSS into dist/, and `assets.directory` tells `wrangler deploy`
+// to serve that directory as a static site — no Worker script needed.
+{
+  "name": "the-understory",
+  "compatibility_date": "2025-05-05",
+  "assets": {
+    "directory": "./dist",
+    // /lessons/004 serves /lessons/004/index.html with a trailing-slash redirect
+    "html_handling": "auto-trailing-slash",
+    // Astro emits dist/404.html; unknown URLs serve it with a real 404 status
+    "not_found_handling": "404-page"
+  }
+}
